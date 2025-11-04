@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 5px 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.logoImg {
+  height: 90px;
+  width: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-grow:1;
+}
+
+.link {
+  text-decoration: none;
+  color: #737373;
+  font-weight: 1000;
+  font-size: 1.8rem;
+  letter-spacing: 0.3px;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #ff3131;
+}
+.active {
+  color: #ff3131; 
+  font-weight: 900;
+   border-bottom: 2px solid #ff3131;
+  padding-bottom: 2px; 
+}
+.loginContainer {
+  margin-left: 1rem; /* רווח מהניווט */
+}
+
+.loginButton {
+  background-color: #ff3131;
+  color: white;
+  padding: 0.7rem 2.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  margin-right: 1rem;
+}
+
+.loginButton:hover {
+  background-color: #737373;
+}
