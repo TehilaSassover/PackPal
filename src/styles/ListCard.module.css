@@ -1,0 +1,21 @@
+.cardButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin: 30px;
+  border-radius: 50%;
+  color: #ffffff;
+  background-color: #737373;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  font-size: 12px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.cardButton:hover {
+  background-color: #ff3131;
+  transform: scale(1.05);
+}

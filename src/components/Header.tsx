@@ -13,8 +13,8 @@ export default function Header() {
         <Link href="/"
           className={`${styles.link} ${pathname === "/" ? styles.active : ""}`}>Home
         </Link>
-        <Link href="/create-list"
-          className={`${styles.link} ${pathname === "/create-list" ? styles.active : ""}`}>Create List
+        <Link href="/lists"
+          className={`${styles.link} ${pathname === "/list-page" ? styles.active : ""}`}>Lists
         </Link>
         <Link href="/my-list"
           className={`${styles.link} ${pathname === "/my-list" ? styles.active : ""}`}>My List
