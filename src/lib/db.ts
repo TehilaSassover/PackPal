@@ -19,7 +19,7 @@ const clientPromise = new MongoClient(uri, {
 async function run() {
   try {
     await clientPromise.connect();
-    await clientPromise.db("shop").command({ ping: 1 });
+    await clientPromise.db("packpal").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );

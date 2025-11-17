@@ -1,0 +1,159 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 30px;
+  padding: 30px;
+}
+
+.card {
+  background: #e9e7e7;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 2px 4px #00000010;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titleTag {
+  background: #ff3b30;
+  color: white;
+  font-weight: bold;
+  padding: 14px 26px;
+  border-radius: 30px;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.actions {
+  display: flex;
+  gap: 18px;
+}
+
+.iconBtn {
+  background: #4a4a4a;
+  color: white;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.iconBtn:hover {
+  background: #383838;
+}
+
+/* ===== MODAL ===== */
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.modalContent {
+  background: #f0ecec;
+  padding: 35px;
+  border-radius: 16px;
+  width: 520px;
+  max-width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.modalTitle {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.modalDescription {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.modalDate {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.itemsHeader {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.itemsList {
+  list-style: none;
+  padding-left: 0;
+}
+
+.itemRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  margin: 8px 0;
+}
+
+/* REAL checkbox */
+.realCheckbox {
+  width: 26px;
+  height: 26px;
+  accent-color: black;
+}
+
+/* Shopping cart bubble */
+.cartIcon {
+  width: 32px;
+  height: 32px;
+  background: #000;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 35px;
+}
+
+.modalBtn {
+  background: #ff3b30;
+  color: white;
+  font-size: 18px;
+  padding: 12px 28px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.modalBtn:hover {
+  background: #d92b22;
+}

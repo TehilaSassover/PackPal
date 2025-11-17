@@ -1,0 +1,43 @@
+/* מיכל ראשי של הקומפוננטה */
+.container {
+  display: flex;                 /* מסדר את הילדים בשורה אנכית */
+  flex-direction: column;        /* העמודה מיישרת את השדות מלמעלה למטה */
+  align-items: center;           /* ממרכז את כל הילדים במרכז האופקי */
+  margin-top: 50px;              /* מרווח מלמעלה */
+  gap: 20px;                     /* רווח בין כל הילדים */
+  font-family: sans-serif;       /* פונטים נקיים */
+}
+
+/* שדות אימייל וסיסמה */
+.inputField {
+  padding: 10px;                 /* ריווח פנימי בשדה */
+  width: 250px;                  /* רוחב קבוע */
+  border: 1px solid #ccc;        /* גבול עדין */
+  border-radius: 5px;            /* פינות מעוגלות */
+}
+
+/* כפתורים כלליים */
+.button {
+  padding: 10px 20px;            /* ריווח פנימי בכפתור */
+  border: none;                  /* בלי גבול */
+  border-radius: 5px;            /* פינות מעוגלות */
+  cursor: pointer;               /* סמן עכבר כשעוברים מעל */
+  transition: opacity 0.2s ease; /* אנימציה חלקה למעבר hover */
+}
+
+/* hover אפקט לכפתורים */
+.button:hover {
+  opacity: 0.9;                  /* קלות שקיפות על hover */
+}
+
+/* כפתור Google */
+.googleButton {
+  background-color: #4285F4;     /* כחול של Google */
+  color: white;                  /* טקסט לבן */
+}
+
+/* כפתור התנתקות */
+.logoutButton {
+  background-color: gray;
+  color: white;
+}
