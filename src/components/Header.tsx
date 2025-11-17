@@ -6,7 +6,6 @@ import { useUserStore } from "@/store/userStore";
 export default function Header() {
   const pathname = usePathname();
   const userStore = useUserStore((state) => state.user);
-  console.log(userStore);
 const logout = useUserStore((state) => state.logout);
 
 const handleLogout = () => {
@@ -25,7 +24,7 @@ const handleLogout = () => {
         <Link href="/lists"
           className={`${styles.link} ${pathname === "/list-page" ? styles.active : ""}`}>Lists
         </Link>
-        <Link href="/my-list"
+        <Link href="/myLists"
           className={`${styles.link} ${pathname === "/my-list" ? styles.active : ""}`}>My List
           </Link>
         <Link href="/community-list"
