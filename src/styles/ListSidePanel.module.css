@@ -1,0 +1,100 @@
+/* ---------------------- PANEL WRAPPER ---------------------- */
+.panel {
+  position: fixed;
+  top: 100px; /* בדיוק מתחת להדר שלך */
+  right: 0;
+  width: 300px;
+
+  height: calc(100vh - 120px); /* הגובה המדויק של הפאנל */
+  background: #e7e4e4;
+  border-radius: 12px 0 0 12px;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+
+  z-index: 2000;
+}
+
+.panel.open {
+  transform: translateX(0);
+}
+
+/* ---------------------- TOP AREA (TITLE + CLOSE) ---------------------- */
+.topBar {
+  position: sticky;
+  top: 0;
+  background: #e7e4e4;
+  padding-bottom: 10px;
+  z-index: 5;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.closeButton {
+  font-size: 26px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+}
+
+/* ---------------------- ITEMS SCROLL AREA ---------------------- */
+.itemsScrollArea {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-top: 10px;
+  padding-right: 10px;
+}
+
+/* ---------------------- BOTTOM BUTTONS ---------------------- */
+.actionsSticky {
+  position: sticky;
+  bottom: 10px;
+
+  background: #e7e4e4;
+  padding-top: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.addButton,
+.viewButton {
+  flex: 1;
+  padding: 10px 12px;
+  background: #FF3B30;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.addButton:hover,
+.viewButton:hover {
+  background: #737373;
+}
+
+/* ---------------------- MOBILE ---------------------- */
+@media (max-width: 900px) {
+  .panel {
+    width: 100%;
+    border-radius: 0;
+  }
+}
