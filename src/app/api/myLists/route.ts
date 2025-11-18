@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getListsByUserId } from "@/lib/myLists"; // פונקציה שמושכת רשימות לפי userId
+import { getListsByUserId, addListToUserLists } from "@/lib/myLists"; // פונקציה שמושכת רשימות לפי userId
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,6 +17,34 @@ export async function GET(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       { error: "Failed to fetch user lists" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { userId, listId } = body;
+
+    if (!userId || !listId) {
+      return NextResponse.json(
+        { error: "Missing userId or listId" },
+        { status: 400 }
+      );
+    }
+
+    const addedListId = await addListToUserLists(userId, listId);
+
+    return NextResponse.json({
+      success: true,
+      addedListId,
+      message: "List added to your personal lists",
+    });
+  } catch (error) {
+    console.error("Error adding list to my lists:", error);
+    return NextResponse.json(
+      { error: "Failed to add list to your personal lists" },
       { status: 500 }
     );
   }
