@@ -1,5 +1,6 @@
 'use client';
 import { useRouter } from "next/navigation";
+import AddToMyListButton from "./AddToMyListButton";
 import styles from "../styles/ListSidePanel.module.css";
 
 interface Item {
@@ -34,17 +35,12 @@ export default function ListSidePanel({
     router.push(`/lists/${list._id}`);
   };
 
-  const handleAddToMyLists = () => {
-    onAddToMyLists(list._id);
-  };
-
   return (
     <div className={`${styles.panel} ${isOpen ? styles.open : ""}`}>
       <div className={styles.topBar}>
         <h2 className={styles.title}>{list.name}</h2>
         <button className={styles.closeButton} onClick={onClose}>×</button>
       </div>
-
 
       {/* אזור הגלילה */}
       <div className={styles.itemsScrollArea}>
@@ -62,9 +58,12 @@ export default function ListSidePanel({
       </div>
 
       <div className={styles.actionsSticky}>
-        <button className={styles.addButton} onClick={handleAddToMyLists}>
-          Add to My Lists
-        </button>
+        <AddToMyListButton
+          listId={list._id}
+          onSuccess={() => onAddToMyLists(list._id)}
+          buttonClassName={styles.addButton}
+          variant="panel"
+        />
 
         <button className={styles.viewButton} onClick={handleNavigateToList}>
           View Full List

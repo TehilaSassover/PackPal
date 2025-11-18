@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import AddToMyListButton from '@/components/AddToMyListButton';
 import styles from '@/styles/ListDetail.module.css';
 
 interface Item {
@@ -20,7 +21,6 @@ export default function ListDetailPage() {
   const [list, setList] = useState<List | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -41,11 +41,6 @@ export default function ListDetailPage() {
         setLoading(false);
       });
   }, [id]);
-
-  const handleAddToMyLists = () => {
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
-  };
 
   if (loading)
     return <div className={styles.container}>Loading...</div>;
@@ -88,13 +83,12 @@ export default function ListDetailPage() {
         </div>
 
         <div className={styles.actionSection}>
-          <button
-            className={`${styles.addButton} ${added ? styles.added : ''}`}
-            onClick={handleAddToMyLists}
-            disabled={added}
-          >
-            {added ? '✓ Added to My Lists' : 'Add to My Lists'}
-          </button>
+          <AddToMyListButton
+            listId={list._id}
+            buttonClassName={styles.addButton}
+            errorClassName={styles.errorMessage}
+            variant="detail"
+          />
         </div>
       </div>
     </div>
