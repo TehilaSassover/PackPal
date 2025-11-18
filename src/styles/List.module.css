@@ -1,70 +1,36 @@
-.container {
+.pageContainer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  width: 100%;
+  min-height: 100vh;
   padding: 20px;
+  box-sizing: border-box;
 }
 
-.categories {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+.mainContent {
+  flex: 1;
+  padding-right: 20px;
 }
 
-.listsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+.mainContent h1 {
+  font-size: 28px;
+  margin-bottom: 24px;
 }
 
-/* כפתורי קטגוריות */
-.cardButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-  margin: 30px;
-  border-radius: 50%;
-  color: #ffffff;
-  background-color: #737373;
-  cursor: pointer;
-  font-weight: bold;
-  text-align: center;
-  font-size: 12px;
-  transition: background-color 0.2s, transform 0.2s;
+.listGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 160px); /* רוחב קבוע לכרטיסים */
+  gap: 20px; /* הרווח בין הכרטיסים */
+  justify-content: start; /* מונע רווח גמיש שמשתנה */
 }
 
+/* רספונסיביות */
+@media (max-width: 640px) {
+  .pageContainer {
+    flex-direction: column;
+  }
 
-.categoryButton:hover {
-  transform: scale(1.05);
+  .mainContent {
+    padding-right: 0;
+  }
 }
 
-/* הכפתור שנבחר נשאר אדום */
-.selected {
-  background-color: #ff3131;
-}
-
-/* כפתורי הרשימות */
-.cardButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  color: #ffffff;
-  background-color: #737373;
-  font-weight: bold;
-  text-align: center;
-  font-size: 12px;
-  transition: background-color 0.2s, transform 0.2s;
-}
-
-.cardButton:hover {
-  background-color: #ff3131;
-  transform: scale(1.05);
-}
