@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaTrash, FaExternalLinkAlt, FaEdit } from "react-icons/fa";
 import styles from "@/styles/MyLists.module.css";
+import { getUserLists, updateList } from "@/services/myLists";
+import { log } from "util";
 
 interface Item {
   name: string;
@@ -28,9 +30,9 @@ export default function MyLists() {
   const [lists, setLists] = useState<List[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [selectedList, setSelectedList] = useState<List | null>(null);
   const [editedList, setEditedList] = useState<List | null>(null);
+  const [mode, setMode] = useState<"view" | "edit" | null>(null);
 
   // Fetch lists
   useEffect(() => {
@@ -41,13 +43,13 @@ export default function MyLists() {
 
     async function fetchLists() {
       try {
-        const res = await fetch(`/api/myLists?userId=${user._id}`);
-        if (!res.ok) throw new Error("Failed to fetch lists");
-
-        const data = await res.json();
+        const data = await getUserLists(user._id);
+        console.log(data);
+        
         setLists(data);
       } catch (err: any) {
         setError(err.message);
+        
       } finally {
         setLoading(false);
       }
@@ -64,20 +66,17 @@ export default function MyLists() {
   async function saveListChanges() {
     if (!editedList) return;
 
-    const res = await fetch(`/api/lists/${editedList._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editedList),
-    });
+    try {
+      await updateList(editedList._id, editedList);
 
-    if (res.ok) {
       setLists((prev) =>
         prev.map((l) => (l._id === editedList._id ? editedList : l))
       );
 
       setSelectedList(null);
       setEditedList(null);
-    } else {
+      setMode(null);
+    } catch (err) {
       alert("Error saving list");
     }
   }
@@ -91,25 +90,38 @@ export default function MyLists() {
               className={styles.titleTag}
               onClick={() => {
                 setSelectedList(list);
-                setEditedList(JSON.parse(JSON.stringify(list))); // deep copy
+                setEditedList(structuredClone(list));
+                setMode("view"); // מצב סימון בלבד
               }}
-              style={{ cursor: "pointer" }}>
+              style={{ cursor: "pointer" }}
+            >
               {list.title}
             </span>
             <div className={styles.actions}>
               <button className={styles.iconBtn}><FaTrash /></button>
               <button className={styles.iconBtn}><FaExternalLinkAlt /></button>
-              <button className={styles.iconBtn}><FaEdit /></button>
+              <button
+                className={styles.iconBtn}
+                onClick={() => {
+                  setSelectedList(list);
+                  setEditedList(structuredClone(list));
+                  setMode("edit"); // מצב עריכה מלאה
+                }}
+              >
+                <FaEdit />
+              </button>
             </div>
           </div>
         </div>
       ))}
+
       {selectedList && editedList && (
         <div
           className={styles.modalBackdrop}
           onClick={() => {
             setSelectedList(null);
             setEditedList(null);
+            setMode(null);
           }}
         >
           <div
@@ -131,8 +143,7 @@ export default function MyLists() {
             <ul className={styles.itemsList}>
               {editedList.items.map((item, index) => (
                 <li key={index} className={styles.itemRow}>
-                  
-                  {/* REAL checkbox */}
+                  {/* Checkbox */}
                   <input
                     type="checkbox"
                     checked={item.isPacked}
@@ -147,19 +158,55 @@ export default function MyLists() {
 
                   <span>{item.name}</span>
 
-                  {/* cart bubble — only when NOT shopping */}
-                  {!item.shopping && (
-                    <div className={styles.cartIcon}>🛒</div>
-                  )}
+                  {/* עגלת קניות */}
+                  <button
+                    onClick={() => {
+                      const updated = { ...editedList };
+                      updated.items[index].shopping = !updated.items[index].shopping;
+                      setEditedList(updated);
+                    }}
+                    style={{
+                      marginLeft: "auto",
+                      fontSize: "18px",
+                      cursor: "pointer",
+                      background: "none",
+                      border: "none",
+                    }}
+                  >
+                    {item.shopping ? "❌" : "🛒"}
+                  </button>
                 </li>
               ))}
             </ul>
-            <div className={styles.modalButtons}>
-              <button className={styles.modalBtn}>Edit List</button>
 
+            {mode === "edit" && (
+              <>
+                {/* שדות לעריכה מלאה */}
+                <input
+                  value={editedList.title}
+                  onChange={(e) =>
+                    setEditedList({ ...editedList, title: e.target.value })
+                  }
+                  className={styles.fullEditInput}
+                />
+                <textarea
+                  value={editedList.description}
+                  onChange={(e) =>
+                    setEditedList({
+                      ...editedList,
+                      description: e.target.value,
+                    })
+                  }
+                  className={styles.fullEditTextarea}
+                />
+              </>
+            )}
+
+            <div className={styles.modalButtons}>
               <button
                 className={styles.modalBtn}
-                onClick={saveListChanges}>
+                onClick={saveListChanges}
+              >
                 Save List
               </button>
             </div>
