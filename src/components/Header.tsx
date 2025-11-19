@@ -24,9 +24,9 @@ const handleLogout = () => {
         <Link href="/lists"
           className={`${styles.link} ${pathname === "/lists" ? styles.active : ""}`}>Lists
         </Link>
-        <Link href="/myLists"
-          className={`${styles.link} ${pathname === "/my-list" ? styles.active : ""}`}>My List
-          </Link>
+        <Link href="/my-pack/my-lists"
+          className={`${styles.link} ${(pathname && pathname.startsWith('/my-pack')) || pathname === "/my-lists" ? styles.active : ""}`}>My Pack
+        </Link>
         <Link href="/community-list"
           className={`${styles.link} ${pathname === "/community-list" ? styles.active : ""}`}>Community List
         </Link>
