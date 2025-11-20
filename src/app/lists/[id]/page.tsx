@@ -16,29 +16,25 @@ export default function ListDetailPage() {
   useEffect(() => {
     if (!id) return;
 
-    const listId = Array.isArray(id) ? id[0] : id;
+    const listId = Array.isArray(id) ? id[0] : id; // Handle case where id might be an array
+    // Why?
 
+    // Take this out to a service layer later
     fetch(`/api/lists/${listId}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch list: ${res.status}`);
         return res.json();
       })
-      .then((data) => {
-        setList(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, [id]);
+      .then((data) => { setList(data) })
+      .catch((err) => { setError(err.message) })
+      .finally(() => { setLoading(false) })
+  }, []);
 
-  if (loading)
-    return <div className={styles.container}>Loading...</div>;
-  if (error)
-    return <div className={styles.container}>Error: {error}</div>;
-  if (!list)
-    return <div className={styles.container}>List not found</div>;
+
+
+  if (loading) return <div className={styles.container}>Loading...</div>;
+  if (error) return <div className={styles.container}>Error: {error}</div>;
+  if (!list) return <div className={styles.container}>List not found</div>;
 
   return (
     <div className={styles.container}>
@@ -51,26 +47,30 @@ export default function ListDetailPage() {
 
         <div className={styles.itemsSection}>
           <h2>Items ({list.defaultItems.length})</h2>
-          {list.defaultItems.length === 0 ? (
-            <p className={styles.emptyMessage}>No items in this list</p>
-          ) : (
-            <table className={styles.itemsTable}>
-              <thead>
-                <tr>
-                  <th>Item Name</th>
-                  <th>Quantity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.defaultItems.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.name}</td>
-                    <td className={styles.quantity}>{item.quantity}</td>
+
+          {/* Put in a component later */}
+          {list.defaultItems.length === 0 ?
+            (
+              <p className={styles.emptyMessage}>No items in this list</p>
+            ) : (
+              <table className={styles.itemsTable}>
+                <thead>
+                  <tr>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                </thead>
+                <tbody>
+                  {list.defaultItems.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.name}</td>
+                      <td className={styles.quantity}>{item.quantity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
         </div>
 
         <div className={styles.actionSection}>
