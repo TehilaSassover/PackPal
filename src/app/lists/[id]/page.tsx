@@ -4,16 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import AddToMyListButton from '@/components/AddToMyListButton';
 import styles from '@/styles/ListDetail.module.css';
 
-interface Item {
-  name: string;
-  quantity: number;
-}
-
-interface List {
-  _id: string;
-  name: string;
-  defaultItems: Item[];
-}
+import { List } from '@/app/types/lists';
 
 export default function ListDetailPage() {
   const router = useRouter();
