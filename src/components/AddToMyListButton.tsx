@@ -57,7 +57,7 @@ export default function AddToMyListButton({
 
       // הפנה לעמוד האישי (עם עיכוב קטן כדי שהמשתמש יראה את ההודעה)
       setTimeout(() => {
-        router.push("/my-list");
+        router.push("/my-pack/my-lists");
       }, 500);
     } catch (err: any) {
       setError(err.message || "Error adding list");

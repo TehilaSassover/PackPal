@@ -10,6 +10,8 @@ export async function getListsByUserId(userId: string) {
     .collection("usersLists")
     .find({ createdBy: userId }) 
     .toArray();
+    console.log("llllllllllllllll"+lists);
+    
   return lists;
 }
 export async function getListById(listId: string){
@@ -19,6 +21,7 @@ export async function getListById(listId: string){
   const list = await db
     .collection("usersLists")
     .findOne({ _id: new ObjectId(listId) });
+    
   return list;
 }
 export async function addListToUserLists(userId: string, listId: string) {
@@ -35,11 +38,13 @@ export async function addListToUserLists(userId: string, listId: string) {
     throw new Error("List not found");
   }
     const userList = {
-    name: originalList.name,
-    defaultItems: originalList.defaultItems,
-    sourceListId: listObjectId, 
-    createdBy: userObjectId,
+    title: originalList.name,
+    description: "",
+    createdBy: userObjectId.toString(),
+    dateOfTrip: originalList.dateOfTrip,
+    items: originalList.defaultItems,
     createdAt: new Date(),
+    updatedAt: new Date(),
   }; 
   const result = await db.collection("usersLists").insertOne(userList);
   return result.insertedId;
