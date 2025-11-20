@@ -1,37 +1,22 @@
 "use client";
-
 import { useUserStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaTrash, FaExternalLinkAlt, FaEdit } from "react-icons/fa";
 import styles from "@/styles/MyLists.module.css";
 import { getUserLists, updateList } from "@/services/myLists";
-import { log } from "util";
+import { PackList } from "@/app/types/lists";
 
-interface Item {
-  name: string;
-  quantity: number;
-  shopping: boolean;
-  isPacked: boolean;
-}
-
-interface List {
-  _id: string;
-  title: string;
-  description: string;
-  dateOfTrip: string;
-  items: Item[];
-}
 
 export default function MyLists() {
   const user = useUserStore((state) => state.user);
   const router = useRouter();
 
-  const [lists, setLists] = useState<List[]>([]);
+  const [lists, setLists] = useState<PackList[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedList, setSelectedList] = useState<List | null>(null);
-  const [editedList, setEditedList] = useState<List | null>(null);
+  const [selectedList, setSelectedList] = useState<PackList | null>(null);
+  const [editedList, setEditedList] = useState<PackList | null>(null);
   const [mode, setMode] = useState<"view" | "edit" | null>(null);
 
   // Fetch lists
@@ -45,23 +30,21 @@ export default function MyLists() {
       try {
         const data = await getUserLists(user._id);
         console.log(data);
-        
+
         setLists(data);
       } catch (err: any) {
         setError(err.message);
-        
+
       } finally {
         setLoading(false);
       }
     }
-
     fetchLists();
   }, [user, router]);
 
   if (!user) return <div>Redirecting to login...</div>;
   if (loading) return <div>Loading your lists...</div>;
   if (error) return <div>Error: {error}</div>;
-
   // Save changes to MongoDB
   async function saveListChanges() {
     if (!editedList) return;
@@ -80,7 +63,6 @@ export default function MyLists() {
       alert("Error saving list");
     }
   }
-
   return (
     <div className={styles.wrapper}>
       {lists.map((list) => (
@@ -102,11 +84,7 @@ export default function MyLists() {
               <button className={styles.iconBtn}><FaExternalLinkAlt /></button>
               <button
                 className={styles.iconBtn}
-                onClick={() => {
-                  setSelectedList(list);
-                  setEditedList(structuredClone(list));
-                  setMode("edit"); // מצב עריכה מלאה
-                }}
+                onClick={() => router.push(`/my-pack/my-lists/edit/${list._id}`)}
               >
                 <FaEdit />
               </button>
@@ -178,35 +156,10 @@ export default function MyLists() {
                 </li>
               ))}
             </ul>
-
-            {mode === "edit" && (
-              <>
-                {/* שדות לעריכה מלאה */}
-                <input
-                  value={editedList.title}
-                  onChange={(e) =>
-                    setEditedList({ ...editedList, title: e.target.value })
-                  }
-                  className={styles.fullEditInput}
-                />
-                <textarea
-                  value={editedList.description}
-                  onChange={(e) =>
-                    setEditedList({
-                      ...editedList,
-                      description: e.target.value,
-                    })
-                  }
-                  className={styles.fullEditTextarea}
-                />
-              </>
-            )}
-
             <div className={styles.modalButtons}>
               <button
                 className={styles.modalBtn}
-                onClick={saveListChanges}
-              >
+                onClick={saveListChanges}>
                 Save List
               </button>
             </div>

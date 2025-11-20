@@ -3,23 +3,9 @@
 import { log } from "console";
 
 // ממש כאן מגדירים את ה־interface
-export interface Item {
-  name: string;
-  quantity: number;
-  shopping: boolean;
-  isPacked: boolean;
-}
-
-export interface List {
-  _id: string;
-  title: string;
-  description: string;
-  dateOfTrip: string;
-  items: Item[];
-}
-
+import { List, PackList } from "@/app/types/lists";
 // פונקציה לקבלת הרשימות של המשתמש
-export async function getUserLists(userId: string): Promise<List[]> {    
+export async function getUserLists(userId: string): Promise<PackList[]> {    
   const res = await fetch(`/api/myLists?userId=${userId}`);
   if (!res.ok) {
     throw new Error("Failed to fetch lists");
@@ -28,7 +14,7 @@ export async function getUserLists(userId: string): Promise<List[]> {
   return res.json();
 }
 // פונקציה לעדכון רשימה
-export async function updateList(listId: string, updatedList: List): Promise<List> {
+export async function updateList(listId: string, updatedList: PackList): Promise<List> {
   const res = await fetch(`/api/myLists`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

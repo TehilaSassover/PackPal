@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import clientPromise from "./db";
+
 export async function getListsByUserId(userId: string) {
   if (!userId) throw new Error("Missing userId");
   const id = new ObjectId(userId);
@@ -10,6 +11,15 @@ export async function getListsByUserId(userId: string) {
     .find({ createdBy: userId }) 
     .toArray();
   return lists;
+}
+export async function getListById(listId: string){
+  if (!listId) throw new Error("Missing listId");
+  const client = await clientPromise;
+  const db = client.db("packpal");
+  const list = await db
+    .collection("usersLists")
+    .findOne({ _id: new ObjectId(listId) });
+  return list;
 }
 export async function addListToUserLists(userId: string, listId: string) {
   if (!userId || !listId) throw new Error("Missing userId or listId"); 
