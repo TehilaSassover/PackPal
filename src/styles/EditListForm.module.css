@@ -102,3 +102,7 @@
 .icon {
   cursor: pointer;
 }
+.inCart {
+  color: green;
+  font-weight: bold;
+}
