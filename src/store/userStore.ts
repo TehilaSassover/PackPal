@@ -1,4 +1,3 @@
-// store/userStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -16,7 +15,7 @@ export const useUserStore = create<UserStore>()(
       logout: () => set({ user: null }),
     }),
     {
-      name: "user-storage", // שם ה-key ב-localStorage
+      name: "user-storage", // localStorage key
     }
   )
 );

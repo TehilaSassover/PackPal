@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import styles from "../styles/Header.module.css";
 import { useUserStore } from "@/store/userStore";
+import ProfileMenu from "./ProfileMenu";  // Import ProfileMenu here
+
 export default function Header() {
   const pathname = usePathname();
   const userStore = useUserStore((state) => state.user);
@@ -32,8 +34,7 @@ const handleLogout = () => {
         </Link>
       </nav>
        <div className={styles.loginContainer}>
-        {userStore ? (<button className={styles.logoutButton} onClick={handleLogout}>Logout</button> ):
-       ( <Link href="/login" className={styles.loginButton}>Login</Link>)}
+        <ProfileMenu />
       </div>
     </header>
   );

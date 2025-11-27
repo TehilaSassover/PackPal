@@ -1,15 +1,13 @@
 "use client";
 
-import RightSideMenu from '@/components/RightSideMenu';
-import styles from '@/styles/MyPackLayout.module.css';
+import AuthModal from "@/components/AuthModal";
+import RightSideMenu from "@/components/RightSideMenu";
 
 export default function MyPackLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={styles.container}>
+    <AuthModal>
       <RightSideMenu />
-      <main className={styles.main}>
-        {children}
-      </main>
-    </div>
+      {children}
+    </AuthModal>
   );
 }
