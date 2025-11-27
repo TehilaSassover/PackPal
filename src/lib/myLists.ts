@@ -10,20 +10,33 @@ export async function getListsByUserId(userId: string) {
     .collection("usersLists")
     .find({ createdBy: userId }) 
     .toArray();
-    console.log("llllllllllllllll"+lists);
+console.log(JSON.stringify(lists, null, 2));
     
   return lists;
 }
-export async function getListById(listId: string){
+export async function getListById(listId: string) {
   if (!listId) throw new Error("Missing listId");
+
   const client = await clientPromise;
   const db = client.db("packpal");
   const list = await db
     .collection("usersLists")
     .findOne({ _id: new ObjectId(listId) });
-    
-  return list;
+
+  if (!list) return null;
+
+  return {
+    _id: list._id.toString(),
+    title: list.title,
+    description: list.description || "",
+    createdBy: list.createdBy?.toString?.() ?? list.createdBy,
+    dateOfTrip: list.dateOfTrip ? list.dateOfTrip.toString() : null,
+    items: list.items || [],
+    createdAt: list.createdAt?.toISOString?.() || null,
+    updatedAt: list.updatedAt?.toISOString?.() || null,
+  };
 }
+
 export async function addListToUserLists(userId: string, listId: string) {
   if (!userId || !listId) throw new Error("Missing userId or listId"); 
   const userObjectId = new ObjectId(userId);

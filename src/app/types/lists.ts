@@ -42,3 +42,10 @@ export interface ListEditorProps {
   onClose: () => void;
   onSave: (updatedList: PackList) => void;
 }
+export interface PackShare {
+  firstName: string;   // שם פרטי
+  lastName: string;    // שם משפחה
+  email: string;       // אימייל
+  content: string;     // תוכן ההערה / השיתוף
+  date: Date;          // תאריך, מסוג Date
+}
