@@ -10,7 +10,7 @@ export interface PackItem {
 export interface PackList {
   _id: string;
   title: string;
-  description: string;
+  description?: string;
   dateOfTrip: string;
   items: PackItem[];
 }
