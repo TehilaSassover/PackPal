@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export interface PackItem {
   name: string;
   quantity: number;
@@ -8,7 +10,7 @@ export interface PackItem {
 export interface PackList {
   _id: string;
   title: string;
-  description: string;
+  description?: string;
   dateOfTrip: string;
   items: PackItem[];
 }
@@ -43,9 +45,12 @@ export interface ListEditorProps {
   onSave: (updatedList: PackList) => void;
 }
 export interface PackShare {
+  _id?: ObjectId;        // מזהה ייחודי של השיתוף, מסוג מחרוזת
   firstName: string;   // שם פרטי
   lastName: string;    // שם משפחה
   email: string;       // אימייל
   content: string;     // תוכן ההערה / השיתוף
-  date: Date;          // תאריך, מסוג Date
+  date: Date;         // תאריך, מסוג Date
+like:Array<string>; // מערך של מיילים של משתמשים שאהבו את השיתוף
+dislike:Array<string>; // מערך של מיילים של משתמשים שלא אהבו את השיתוף
 }

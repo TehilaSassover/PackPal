@@ -1,4 +1,5 @@
 import { PackShare } from "@/app/types/lists";
+import { UpdateResult } from "mongodb";
 export async function getAllPackSharesAPI(): Promise<PackShare[]> {
   const res = await fetch(`/api/community`, {
     method: "GET",
@@ -25,4 +26,15 @@ export async function sendPackShareAPI(share: PackShare): Promise<PackShare> {
   } 
  ;
  return await res.json();
+}
+export async function updatReactionsPackShareAPI(shareId: string, userEmail: string,type:string): 
+Promise<UpdateResult<Document>>{
+  const res = await fetch(`/api/community`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ shareId, userEmail ,type}),
+  });
+  const data = await res.json();
+console.log("dataaaaaa" + JSON.stringify(data));
+  return data; 
 }

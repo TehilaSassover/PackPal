@@ -21,7 +21,6 @@ export default function MyLists() {
     }
     async function fetchLists() {
       try {
-alert(JSON.stringify(user, null, 2));
         const data = await getUserLists(user._id);
         setLists(data);
       } catch (err: any) {

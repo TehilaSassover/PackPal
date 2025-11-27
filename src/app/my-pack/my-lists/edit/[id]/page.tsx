@@ -9,8 +9,9 @@ export default function EditListPage() {
   const [list, setList] = useState<any>(null);
 
   useEffect(() => {
-    getListByIdAPI(params.id).then(data => setList(data));
-  }, []);
+    
+  if (typeof params.id === 'string') {
+      getListByIdAPI(params.id).then(data => setList(data));}  }, []);
 
  if (!list) return <div>Loading...</div>;
 
