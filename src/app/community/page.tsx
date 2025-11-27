@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getAllPackSharesAPI, sendPackShareAPI } from "@/services/packShare"; // נניח שיש פונקציה לשליחת טיפ
+import { getAllPackSharesAPI, sendPackShareAPI } from "@/services/packShare";
 import { PackShare } from "@/app/types/lists";
 import Share from "@/components/Share";
 import styles from "@/styles/PackSharesCommponent.module.css";
@@ -10,8 +10,9 @@ export default function PackShareComponent() {
   const [shares, setShares] = useState<PackShare[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [newTip, setNewTip] = useState(""); // הטיפ שהמשתמש מקליד
+  const [newTip, setNewTip] = useState("");
   const [sending, setSending] = useState(false);
+  const [tipError, setTipError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchShares() {
@@ -29,20 +30,26 @@ export default function PackShareComponent() {
   }, []);
 
   const handleSendTip = async () => {
-    if (!newTip.trim()) return;
+    const trimmedTip = newTip.trim();
+    const wordCount = trimmedTip.split(/\s+/).filter(Boolean).length;
+    if (!trimmedTip) { setTipError("Tip cannot be empty!"); return; }
+    if (wordCount < 2) { setTipError("Tip must contain at least 2 words!"); return; }
+    setTipError(null);   
     setSending(true);
     try {
-      const user=useUserStore.getState().user;
+      const user = useUserStore.getState().user;
       const tipData = {
-        firstName: user.firstName, 
+        firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        content: newTip,
+        content: trimmedTip,
         date: new Date(),
+        like: [],
+        dislike: []
       };
       const savedTip = await sendPackShareAPI(tipData);
-      setShares([savedTip, ...shares]); 
-      setNewTip("");
+      setShares([savedTip, ...shares]);
+      setNewTip(""); 
     } catch (err: any) {
       console.error(err);
       alert("Failed to send tip");
@@ -50,14 +57,11 @@ export default function PackShareComponent() {
       setSending(false);
     }
   };
-
   if (loading) return <p>Loading pack shares...</p>;
   if (error) return <p className={styles.error}>{error}</p>;
-
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Community Posts</h2>
-
       {shares.length === 0 ? (
         <p>No pack shares found.</p>
       ) : (
@@ -68,17 +72,24 @@ export default function PackShareComponent() {
         </div>
       )}
 
-      {/* טופס להוספת טיפ */}
-      <div className={styles.tipForm}>
-        <textarea
-          placeholder="Before you start, share with us: what helps you pack better?"
-          value={newTip}
-          onChange={(e) => setNewTip(e.target.value)}
-          className={styles.textarea}
-        />
-        <button onClick={handleSendTip} disabled={sending} className={styles.sendButton}>
+      <div className="tipFormWrapper">
+        <div className={styles.tipForm}>
+          <textarea
+            placeholder="Before you start, share with us: what helps you pack better?"
+            value={newTip}
+            onChange={(e) => setNewTip(e.target.value)}
+            className={styles.textarea}
+          />
+          {tipError && <p className={styles.error}>{tipError}</p>}
+        </div>
+        <button
+          onClick={handleSendTip}
+          disabled={sending}
+          className={styles.sendButton}
+        >
           {sending ? "Sending..." : "Send Tip"}
         </button>
+
       </div>
     </div>
   );
