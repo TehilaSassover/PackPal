@@ -1,0 +1,75 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
+.sharesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* שתיים בכל שורה */
+  gap: 30px;
+  margin-bottom: 40px; /* רווח לפני הטופס */
+}
+
+/* ▬▬▬ טופס טיפ ▬▬▬ */
+.tipFormWrapper {
+  display: flex;
+  justify-content: center; /* מרכז אופקי */
+  align-items: center;     /* מרכז אנכי */
+  margin-top: 40px;
+}
+
+.tipForm {
+  display: flex;
+  flex-direction: row; /* שורה אחת */
+  align-items: flex-start; /* יישור למעלה */
+  gap: 8px; /* רווח קטן בין השדה להודעה */
+}
+
+.textarea {
+  width: 550px;
+  height: 100px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.error {
+  color: red;
+  font-size: 1.5rem;
+  /* לא צריך margin-left:auto, פשוט יישרנו עם gap */
+  white-space: nowrap; /* שלא תעבור שורה */
+  align-self: center; 
+  font-weight: bold;/* אם רוצים שהיא תהיה בגובה מרכזי מול השדה */
+}
+
+
+.sendButton {
+  padding: 10px 20px;
+  background-color: #ff3131;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s ease;
+margin-top: 10px;}
+
+.sendButton:hover:not(:disabled) {
+  background-color: #737373;
+}
+
+.sendButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

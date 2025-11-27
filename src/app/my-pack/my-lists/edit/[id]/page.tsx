@@ -1,12 +1,19 @@
+"use client";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getListByIdAPI } from "@/services/myLists";
 import { EditListForm } from "@/components/EditListForm";
-import { getListById } from "@/lib/myLists";
 
-export default async function EditListPage({ params }: any) {
-  const resolvedParams = await params;
-  const list = await getListById(resolvedParams.id);
+export default function EditListPage() {
+  const params = useParams();
+  const [list, setList] = useState<any>(null);
 
-  if (!list) return <div>List not found</div>;
+  useEffect(() => {
+    
+  if (typeof params.id === 'string') {
+      getListByIdAPI(params.id).then(data => setList(data));}  }, []);
 
-  return <EditListForm initialList={list} />;
+ if (!list) return <div>Loading...</div>;
+
+return <EditListForm initialList={list} />;
 }
-

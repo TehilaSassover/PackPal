@@ -1,18 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getListById } from "@/lib/myLists"; // פונקציה שמושכת רשימות לפי userId
+import { getListById } from "@/lib/myLists";
 
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const { id } = req.nextUrl.pathname.match(/\/api\/myLists\/(.+)$/)!.groups!;
-    
+    const { id } = await context.params;
+
     if (!id) {
       return NextResponse.json({ error: "Missing list id" }, { status: 400 });
     }
 
     const list = await getListById(id);
+
     if (!list) {
       return NextResponse.json({ error: "List not found" }, { status: 404 });
     }
+
     return NextResponse.json(list);
   } catch (error) {
     console.error(error);
