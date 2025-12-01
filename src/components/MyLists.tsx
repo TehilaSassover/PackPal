@@ -15,10 +15,6 @@ export default function MyLists() {
   const [selectedList, setSelectedList] = useState<PackList | null>(null);
   const [editedList, setEditedList] = useState<PackList | null>(null);
   useEffect(() => {
-    if (!user) {
-      router.push("/login");
-      return;
-    }
     async function fetchLists() {
       try {
         const data = await getUserLists(user._id);
