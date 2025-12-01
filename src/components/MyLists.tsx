@@ -15,19 +15,14 @@ export default function MyLists() {
   const [selectedList, setSelectedList] = useState<PackList | null>(null);
   const [editedList, setEditedList] = useState<PackList | null>(null);
   useEffect(() => {
-    if (!user) {
-      router.push("/login");
-      return;
-    }
+    if (!user) { router.push("/login"); return; }
     async function fetchLists() {
       try {
         const data = await getUserLists(user._id);
         setLists(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
       }
+      catch (err: any) { setError(err.message); }
+      finally { setLoading(false); }
     }
     fetchLists();
   }, []);
@@ -38,14 +33,10 @@ export default function MyLists() {
     if (!editedList) return;
     try {
       await updateList(editedList._id, editedList);
-      setLists((prev) =>
-        prev.map((l) => (l._id === editedList._id ? editedList : l))
-      );
+      setLists((prev) => prev.map((l) => (l._id === editedList._id ? editedList : l)));
       setSelectedList(null);
       setEditedList(null);
-    } catch (err) {
-      alert("Error saving list");
-    }
+    } catch (err) { alert("Error saving list"); }
   }
   return (
     <div className={styles.wrapper}>
@@ -58,8 +49,7 @@ export default function MyLists() {
                 setSelectedList(list);
                 setEditedList(structuredClone(list));
               }}
-              style={{ cursor: "pointer" }}
-            >
+              style={{ cursor: "pointer" }}>
               {list.title}
             </span>
             <div className={styles.actions}>
@@ -75,28 +65,23 @@ export default function MyLists() {
         </div>
       ))}
       {selectedList && editedList && (
-        <div
-          className={styles.modalBackdrop}
+        <div className={styles.modalBackdrop}
           onClick={() => {
             setSelectedList(null);
             setEditedList(null);
           }}>
-          <div
-            className={styles.modalContent}
+          <div className={styles.modalContent}
             onClick={(e) => e.stopPropagation()}>
             <h1 className={styles.modalTitle}>{editedList.title}</h1>
             <p className={styles.modalDate}>
-              <strong>
-                {new Date(editedList.dateOfTrip).toLocaleDateString()}
-              </strong>
+              <strong>{new Date(editedList.dateOfTrip).toLocaleDateString()}</strong>
             </p>
             <p className={styles.modalDescription}>{editedList.description}</p>
             <h3 className={styles.itemsHeader}>Items:</h3>
             <ul className={styles.itemsList}>
               {editedList.items.map((item, index) => (
                 <li key={index} className={styles.itemRow}>
-                  <input
-                    type="checkbox"
+                  <input type="checkbox"
                     checked={item.isPacked}
                     onChange={() => {
                       const updated = { ...editedList };
@@ -104,8 +89,7 @@ export default function MyLists() {
                         !updated.items[index].isPacked;
                       setEditedList(updated);
                     }}
-                    className={styles.realCheckbox}
-                  />
+                    className={styles.realCheckbox} />
                   <span>{item.name}</span>
                   <button
                     onClick={() => {

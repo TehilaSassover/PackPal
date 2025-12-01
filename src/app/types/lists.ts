@@ -54,3 +54,11 @@ export interface PackShare {
 like:Array<string>; // מערך של מיילים של משתמשים שאהבו את השיתוף
 dislike:Array<string>; // מערך של מיילים של משתמשים שלא אהבו את השיתוף
 }
+export interface ShoppingList{
+  _id:ObjectId,
+  userId:string,
+  listId:string,
+  item:string,
+  quantity:number,
+  createdAt:Date
+}

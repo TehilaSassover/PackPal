@@ -188,15 +188,12 @@ export function EditListForm({ initialList, onSave }: EditListFormProps) {
                 />
                 <FaTrash
                   className={styles.smallIcon}
-                  onClick={() => handleDeleteItem(index)}
-                />
-              </>
+                  onClick={() => handleDeleteItem(index)}/>
+                  </>
             )}
           </li>
         ))}
       </ul>
-
-      {/* הוספת פריט חדש */}
       <div className={styles.addRow}>
         <input
           value={newItemName}
