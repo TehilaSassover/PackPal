@@ -20,7 +20,7 @@ export async function getListById(id: string): Promise<PackList | null> {
     const client = await clientPromise;
     const db = client.db("packpal");
 
-    const list = await db.collection("usersLists").findOne({ _id: new ObjectId(id) });
+    const list = await db.collection("lists").findOne({ _id: new ObjectId(id) });
 console.log("Fetched list:", list);
     return list as PackList | null;
   } catch (error) {
