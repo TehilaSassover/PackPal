@@ -5,7 +5,7 @@
   align-items: center;           /* ממרכז את כל הילדים במרכז האופקי */
   margin-top: 50px;              /* מרווח מלמעלה */
   gap: 20px;                     /* רווח בין כל הילדים */
-  font-family: sans-serif;       /* פונטים נקיים */
+  /* font-family: sans-serif; */
 }
 
 /* שדות אימייל וסיסמה */

@@ -3,42 +3,35 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import AddToMyListButton from '@/components/AddToMyListButton';
 import styles from '@/styles/ListDetail.module.css';
-
+import { getListById } from '@/services/lists';
 import { List } from '@/app/types/lists';
 
 export default function ListDetailPage() {
   const router = useRouter();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [list, setList] = useState<List | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
-
-    const listId = Array.isArray(id) ? id[0] : id;
-
-    fetch(`/api/lists/${listId}`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`Failed to fetch list: ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
+    const fetchList = async () => {
+      try {
+        const data = await getListById(id);
         setList(data);
-        setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err: any) {
         setError(err.message);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchList();
   }, [id]);
 
-  if (loading)
-    return <div className={styles.container}>Loading...</div>;
-  if (error)
-    return <div className={styles.container}>Error: {error}</div>;
-  if (!list)
-    return <div className={styles.container}>List not found</div>;
+  if (loading) return <div className={styles.container}>Loading...</div>;
+  if (error) return <div className={styles.container}>Error: {error}</div>;
+  if (!list) return <div className={styles.container}>List not found</div>;
 
   return (
     <div className={styles.container}>

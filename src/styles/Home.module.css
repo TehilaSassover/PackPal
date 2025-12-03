@@ -1,15 +1,16 @@
 .container {
   position: relative;
   width: 100vw;
-  height: 100vh;       /* תופס את כל הדף */
+  height: calc(100vh - 100px);
   overflow: hidden;
 }
 
 .bgImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;   /* תמונה ממלאת את כל הדף */
-  filter: blur(4px);   /* מטושטש */
+  object-fit: cover;
+  opacity: 0.4;
+  /* filter: blur(4px); */
   position: absolute;
   top: 0;
   left: 0;
@@ -18,12 +19,12 @@
 
 .text {
   position: absolute;
-  top: 50%;
+  top: 10%;
   left: 50%;
   transform: translate(-50%, -50%); /* מרכז את הטקסט */
-  color: white;
+  color: rgb(19, 19, 19);
   font-size: 3rem;
   font-weight: bold;
-  z-index: 1;           /* מעל התמונה */
+  z-index: 1;
   text-align: center;
 }
