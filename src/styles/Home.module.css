@@ -22,6 +22,7 @@
   top: 10%;
   left: 50%;
   transform: translate(-50%, -50%); /* מרכז את הטקסט */
+  font-family: 'Knewave', cursive;
   color: rgb(19, 19, 19);
   font-size: 3rem;
   font-weight: bold;
