@@ -8,11 +8,11 @@ import ProfileMenu from "./ProfileMenu";  // Import ProfileMenu here
 export default function Header() {
   const pathname = usePathname();
   const userStore = useUserStore((state) => state.user);
-const logout = useUserStore((state) => state.logout);
+  const logout = useUserStore((state) => state.logout);
 
-const handleLogout = () => {
-  logout(); 
-};
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <header className={styles.header}>
@@ -33,7 +33,7 @@ const handleLogout = () => {
           className={`${styles.link} ${pathname === "/community-list" ? styles.active : ""}`}>Community List
         </Link>
       </nav>
-       <div className={styles.loginContainer}>
+      <div className={styles.loginContainer}>
         <ProfileMenu />
       </div>
     </header>

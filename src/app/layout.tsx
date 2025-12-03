@@ -1,18 +1,17 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
-export const metadata = {
+import "./globals.css";
+
+export const metadata: Metadata = {
   title: "PackPal",
+  description: "Your personal packing list assistant",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode }>) {
 
   return (
     <html lang="en">
-      <body
-      >
+      <body>
         <Header />
         {children}
       </body>
