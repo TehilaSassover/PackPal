@@ -14,9 +14,7 @@ export default function ProfileMenu() {
   const setUserStore = useUserStore((state) => state.setUser);
   const logoutStore = useUserStore((state) => state.logout);
 
-  // Local fallback user from localStorage
   const [storedUser, setStoredUser] = useState<any>(null);
-
   // Zustand menu store
   const menuOpen = useMenuStore((state) => state.isOpen);
   const toggleMenu = useMenuStore((state) => state.toggle);
@@ -60,6 +58,8 @@ export default function ProfileMenu() {
     try {
       const result = await signInWithPopup(auth, provider);
       await verifyAndSetUser(result.user, setStoredUser, setUserStore, logoutStore, setErrors);
+            console.log("Google login result:", result);
+
       closeMenu();
     } catch (error) {
       setErrors({ email: "Google login failed" });

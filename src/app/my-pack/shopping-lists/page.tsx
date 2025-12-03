@@ -1,136 +1,28 @@
 "use client";
+import { useEffect, useState } from "react";
+import { getAllShoppingListAPI } from "@/services/shoppingLists";
+import { useUserStore } from "@/store/userStore";
+import ShoppingItem from "@/components/ShoppingItem";
+import {ShoppingList } from "@/app/types/lists";
 
 export default function ShoppingListsPage() {
+  const userId = useUserStore(state => state.user?._id);
+  const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    getAllShoppingListAPI(userId)
+      .then((data:ShoppingList[]) => {setShoppingLists(data);})
+      .catch(err => console.error(err));
+  }, []);
+
   return (
     <div style={{ padding: "20px" }}>
       <h1>Shopping Lists</h1>
-      <p >
-        This page will allow you to create a new shopping list.
-      </p>
+      {shoppingLists.map(list => (
+        <ShoppingItem key={list._id.toString()} item={list.item} quantity={list.quantity} />
+      ))}
     </div>
   );
 }
-
-// "use client";
-
-// import { useState } from "react";
-// import styles from "@/styles/MyLists.module.css";
-
-// interface Item {
-//   id: string;
-//   name: string;
-//   quantity: number;
-//   checked: boolean;
-// }
-
-// export default function MyPackMyListPage() {
-//   const [items, setItems] = useState<Item[]>([]);
-//   const [inputValue, setInputValue] = useState("");
-//   const [quantityValue, setQuantityValue] = useState(1);
-
-//   const handleAddItem = () => {
-//     if (inputValue.trim() === "") return;
-
-//     const newItem: Item = {
-//       id: Date.now().toString(),
-//       name: inputValue,
-//       quantity: quantityValue,
-//       checked: false,
-//     };
-
-//     setItems([...items, newItem]);
-//     setInputValue("");
-//     setQuantityValue(1);
-//   };
-
-//   const handleToggleItem = (id: string) => {
-//     setItems(
-//       items.map((item) =>
-//         item.id === id ? { ...item, checked: !item.checked } : item
-//       )
-//     );
-//   };
-
-//   const handleDeleteItem = (id: string) => {
-//     setItems(items.filter((item) => item.id !== id));
-//   };
-
-//   const handleClearCompleted = () => {
-//     setItems(items.filter((item) => !item.checked));
-//   };
-
-//   const completedCount = items.filter((item) => item.checked).length;
-
-//   return (
-//     <div className={styles.container}>
-//       <div className={styles.header}>
-//         <h1>My Shopping List</h1>
-//         <p className={styles.subtitle}>
-//           {items.length} items • {completedCount} completed
-//         </p>
-//       </div>
-
-//       <div className={styles.inputSection}>
-//         <div className={styles.inputGroup}>
-//           <input
-//             type="text"
-//             placeholder="Add item..."
-//             value={inputValue}
-//             onChange={(e) => setInputValue(e.target.value)}
-//             onKeyPress={(e) => {
-//               if (e.key === "Enter") handleAddItem();
-//             }}
-//             className={styles.input}
-//           />
-//           <input
-//             type="number"
-//             min="1"
-//             value={quantityValue}
-//             onChange={(e) => setQuantityValue(parseInt(e.target.value) || 1)}
-//             className={styles.quantityInput}
-//           />
-//           <button onClick={handleAddItem} className={styles.addButton}>
-//             Add
-//           </button>
-//         </div>
-//       </div>
-
-//       <div className={styles.itemsSection}>
-//         {items.length === 0 ? (
-//           <p className={styles.emptyMessage}>Your list is empty. Start adding items!</p>
-//         ) : (
-//           <ul className={styles.itemsList}>
-//             {items.map((item) => (
-//               <li key={item.id} className={styles.item}>
-//                 <input
-//                   type="checkbox"
-//                   checked={item.checked}
-//                   onChange={() => handleToggleItem(item.id)}
-//                   className={styles.checkbox}
-//                 />
-//                 <span className={`${styles.itemName} ${item.checked ? styles.completed : ""}`}>
-//                   {item.name}
-//                 </span>
-//                 <span className={styles.quantity}>{item.quantity}x</span>
-//                 <button
-//                   onClick={() => handleDeleteItem(item.id)}
-//                   className={styles.deleteButton}
-//                 >
-//                   Delete
-//                 </button>
-//               </li>
-//             ))}
-//           </ul>
-//         )}
-//       </div>
-
-//       {items.length > 0 && completedCount > 0 && (
-//         <div className={styles.footerSection}>
-//           <button onClick={handleClearCompleted} className={styles.clearButton}>
-//             Clear Completed ({completedCount})
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }

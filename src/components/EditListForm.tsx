@@ -1,23 +1,24 @@
-'use client';
-
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PackItem } from "@/app/types/lists";
-import styles from "../styles/EditListForm.module.css";
-import { FaTrash, FaPen, FaShoppingCart, FaCheck, FaTimes } from "react-icons/fa";
-import { updateList } from "@/services/myLists"; // ודאי שהשירות קיים
+import styles from "@/styles/MyLists.module.css";
+import { PackItemsEditor } from "@/components/PackItemsEditor";
+import { updateList } from "@/services/myLists";
+
 
 interface EditListFormProps {
   initialList: {
     _id: string;
     title: string;
     dateOfTrip?: string | Date;
-    items?: PackItem[];
     description?: string;
+    items?: PackItem[];
   };
-  onSave?: (updatedList: any) => void; // אופציונלי למקרה שה-parent צריך לדעת
+  onClose?: () => void;
 }
-export function EditListForm({ initialList, onSave }: EditListFormProps) {
+
+export function EditListForm({ initialList, onClose }: EditListFormProps) {
   const router = useRouter();
   const [editedList, setEditedList] = useState({
     ...initialList,
@@ -25,199 +26,58 @@ export function EditListForm({ initialList, onSave }: EditListFormProps) {
     dateOfTrip: initialList.dateOfTrip
       ? new Date(initialList.dateOfTrip).toISOString().split("T")[0]
       : "",
+    description: initialList.description || "",
   });
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editItemName, setEditItemName] = useState("");
-  const [newItemName, setNewItemName] = useState("");
-  const [newItemQty, setNewItemQty] = useState(1);
-  const [editTitle, setEditTitle] = useState(false);
-  // שינוי כותרת
-  const handleTitleChange = (e: any) => {
-    setEditedList({ ...editedList, title: e.target.value });
-  };
-  // שינוי תאריך
-  const handleDateChange = (e: any) => {
-    setEditedList({ ...editedList, dateOfTrip: e.target.value });
-  };
-  // שינוי פריט קיים
-  const handleItemChange = (index: number, value: string) => {
-    if (!editedList.items) return;
-    const newItems = [...editedList.items];
-    newItems[index] = { ...newItems[index], name: value };
-    setEditedList({ ...editedList, items: newItems });
-  };
 
-  // הוספת פריט חדש
-  const handleAddItem = () => {
-    if (!newItemName.trim()) return;
-    const newItem: PackItem = {
-      name: newItemName,
-      quantity: newItemQty,
-      isPacked: false,
-      shopping: false,
-    };
-    setEditedList({
-      ...editedList,
-      items: [...(editedList.items || []), newItem],
-    });
-    setNewItemName("");
-    setNewItemQty(1);
-  };
-
-  // שמירה כללית + ניווט חזרה
   const handleSave = async () => {
-    try {
-      await updateList(editedList._id, editedList);
-      alert("Changes saved successfully")
-      router.push("/my-pack/my-lists"); // ניווט חזרה לדף הרשימות
-    } catch (err) {
-      console.error(err);
-      alert("Error saving list");
-    }
-  };
-
-  // התחלת עריכת פריט
-  const startEditing = (index: number, currentName: string) => {
-    setEditIndex(index);
-    setEditItemName(currentName);
-  };
-
-  // שמירה של עריכת פריט
-  const saveEdit = (index: number) => {
-    handleItemChange(index, editItemName);
-    setEditIndex(null);
-  };
-
-  // ביטול עריכת פריט
-  const cancelEdit = () => {
-    setEditIndex(null);
-  };
-
-  // מחיקת פריט
-  const handleDeleteItem = (index: number) => {
-    if (!editedList.items) return;
-    const newItems = editedList.items.filter((_, i) => i !== index);
-    setEditedList({ ...editedList, items: newItems });
+    await updateList(editedList._id, editedList);
+    if (onClose) onClose();
+    else router.push("/my-pack/my-lists");
   };
 
   return (
-    <div className={styles.card}>
-      {/* TITLE */}
-      <div className={styles.titleRow}>
-        {editTitle ? (
+    <div className={styles.modalBackdrop} onClick={() => onClose && onClose()}>
+      <div className={styles.modalContent}
+        onClick={(e) => e.stopPropagation()}>
+        <div style={{ marginBottom: "12px" }}>
+          <label style={{ fontWeight: "bold", fontSize: "18px", color: "black" }}>Title:</label>
           <input
-            className={styles.titleInput}
+            type="text"
             value={editedList.title}
-            onChange={handleTitleChange}
-            autoFocus
+            onChange={(e) => setEditedList({ ...editedList, title: e.target.value })}
+            style={{ width: "100%", margin: "6px 0", padding: "6px", fontSize: "16px" }}
           />
-        ) : (
-          <span>{editedList.title}</span>
-        )}
-        <FaPen
-          className={styles.icon}
-          onClick={() => setEditTitle(!editTitle)}
+        </div>
+        <div style={{ marginBottom: "12px" }}>
+          <label style={{ fontWeight: "bold", fontSize: "18px" }}>Date:</label>
+          <input
+            type="date"
+            value={editedList.dateOfTrip || ""}
+            onChange={(e) => setEditedList({ ...editedList, dateOfTrip: e.target.value })}
+            style={{ width: "100%", margin: "6px 0", padding: "6px", fontSize: "16px" }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "12px" }}>
+          <label style={{ fontWeight: "bold", fontSize: "18px" }}>Description:</label>
+          <textarea
+            value={editedList.description}
+            onChange={(e) => setEditedList({ ...editedList, description: e.target.value })}
+            style={{ width: "100%", margin: "6px 0", padding: "6px", fontSize: "16px" }}
+            rows={3}
+          />
+        </div>
+
+        <PackItemsEditor
+          items={editedList.items}
+          setItems={(items) => setEditedList({ ...editedList, items })}
+          mode="edit"
         />
+
+        <div className={styles.modalButtons} style={{ marginTop: "20px" }}>
+          <button className={styles.modalBtn} onClick={handleSave}>Save</button>
+        </div>
       </div>
-
-      {/* DATE */}
-      <div className={styles.dateRow}>
-        <label>Date:</label>
-        <input
-          type="date"
-          className={styles.dateInput}
-          value={editedList.dateOfTrip || ""}
-          onChange={handleDateChange}
-        />
-      </div>
-
-      <h3 className={styles.subtitle}>Items:</h3>
-
-      <ul className={styles.itemsList}>
-        {(editedList.items || []).map((item: PackItem, index: number) => (
-          <li key={index} className={styles.listItem}>
-            {editIndex === index ? (
-              <>
-                <input
-                  value={editItemName}
-                  onChange={(e) => setEditItemName(e.target.value)}
-                  className={styles.editInput}
-                  autoFocus
-                />
-                <FaCheck
-                  className={styles.smallIcon}
-                  onClick={() => saveEdit(index)}
-                  title="Save"
-                />
-                <FaTimes
-                  className={styles.smallIcon}
-                  onClick={cancelEdit}
-                  title="Cancel"
-                />
-              </>
-            ) : (
-              <>
-                {/* אייקון עגלה או הסרה מהעגלה */}
-                {item.shopping ? (
-                  <FaTimes
-                    className={styles.cartIcon}
-                    onClick={() => {
-                      const newItems = [...editedList.items];
-                      newItems[index] = { ...item, shopping: false };
-                      setEditedList({ ...editedList, items: newItems });
-                    }}
-                    title="Remove from cart"
-                  />
-                ) : (
-                  <FaShoppingCart
-                    className={styles.cartIcon}
-                    onClick={() => {
-                      const newItems = [...editedList.items];
-                      newItems[index] = { ...item, shopping: true };
-                      setEditedList({ ...editedList, items: newItems });
-                    }}
-                    title="Add to cart"
-                  />
-                )}
-
-                <span>{item.name}</span>
-
-                <FaPen
-                  className={styles.smallIcon}
-                  onClick={() => startEditing(index, item.name)}
-                />
-                <FaTrash
-                  className={styles.smallIcon}
-                  onClick={() => handleDeleteItem(index)}
-                />
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
-
-      {/* הוספת פריט חדש */}
-      <div className={styles.addRow}>
-        <input
-          value={newItemName}
-          onChange={(e) => setNewItemName(e.target.value)}
-          placeholder="Item"
-          className={styles.addInput}
-        />
-        <input
-          type="number"
-          value={newItemQty}
-          onChange={(e) => setNewItemQty(Number(e.target.value))}
-          className={styles.qtyInput}
-        />
-        <button onClick={handleAddItem} className={styles.addBtn}>
-          +
-        </button>
-      </div>
-
-      <button onClick={handleSave} className={styles.saveBtn}>
-        SAVE
-      </button>
     </div>
   );
 }

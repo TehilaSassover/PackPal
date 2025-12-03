@@ -11,8 +11,6 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
-    // מנסה למצוא את המשתמש
     let user = await getUserByUid(uid);
     console.log("Found user:", user);
 
