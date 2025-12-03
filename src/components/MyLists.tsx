@@ -6,43 +6,28 @@ import { FaTrash, FaExternalLinkAlt, FaEdit } from "react-icons/fa";
 import styles from "@/styles/MyLists.module.css";
 import { getUserLists, updateList } from "@/services/myLists";
 import { PackList } from "@/app/types/lists";
+import { PackItemsEditor } from "@/components/PackItemsEditor";
+
 export default function MyLists() {
   const user = useUserStore((state) => state.user);
   const router = useRouter();
   const [lists, setLists] = useState<PackList[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedList, setSelectedList] = useState<PackList | null>(null);
   const [editedList, setEditedList] = useState<PackList | null>(null);
+
   useEffect(() => {
-    async function fetchLists() {
-      try {
-        const data = await getUserLists(user._id);
-        setLists(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchLists();
+    if (!user) return;
+    getUserLists(user._id).then(setLists);
   }, []);
-  if (!user) return <div>Redirecting to login...</div>;
-  if (loading) return <div>Loading your lists...</div>;
-  if (error) return <div>Error: {error}</div>;
+
   async function saveListChanges() {
     if (!editedList) return;
-    try {
-      await updateList(editedList._id, editedList);
-      setLists((prev) =>
-        prev.map((l) => (l._id === editedList._id ? editedList : l))
-      );
-      setSelectedList(null);
-      setEditedList(null);
-    } catch (err) {
-      alert("Error saving list");
-    }
+    await updateList(editedList._id, editedList);
+    setLists((prev) => prev.map((l) => (l._id === editedList._id ? editedList : l)));
+    setSelectedList(null);
+    setEditedList(null);
   }
+
   return (
     <div className={styles.wrapper}>
       {lists.map((list) => (
@@ -54,79 +39,37 @@ export default function MyLists() {
                 setSelectedList(list);
                 setEditedList(structuredClone(list));
               }}
-              style={{ cursor: "pointer" }}
             >
               {list.title}
             </span>
+
             <div className={styles.actions}>
               <button className={styles.iconBtn}><FaTrash /></button>
               <button className={styles.iconBtn}><FaExternalLinkAlt /></button>
               <button
                 className={styles.iconBtn}
-                onClick={() => router.push(`/my-pack/my-lists/edit/${list._id}`)}>
+                onClick={() => router.push(`/my-pack/my-lists/edit/${list._id}`)}
+              >
                 <FaEdit />
               </button>
             </div>
           </div>
         </div>
       ))}
+
       {selectedList && editedList && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => {
-            setSelectedList(null);
-            setEditedList(null);
-          }}>
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}>
+        <div className={styles.modalBackdrop} onClick={() => setSelectedList(null)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <h1 className={styles.modalTitle}>{editedList.title}</h1>
-            <p className={styles.modalDate}>
-              <strong>
-                {new Date(editedList.dateOfTrip).toLocaleDateString()}
-              </strong>
-            </p>
-            <p className={styles.modalDescription}>{editedList.description}</p>
-            <h3 className={styles.itemsHeader}>Items:</h3>
-            <ul className={styles.itemsList}>
-              {editedList.items.map((item, index) => (
-                <li key={index} className={styles.itemRow}>
-                  <input
-                    type="checkbox"
-                    checked={item.isPacked}
-                    onChange={() => {
-                      const updated = { ...editedList };
-                      updated.items[index].isPacked =
-                        !updated.items[index].isPacked;
-                      setEditedList(updated);
-                    }}
-                    className={styles.realCheckbox}
-                  />
-                  <span>{item.name}</span>
-                  <button
-                    onClick={() => {
-                      const updated = { ...editedList };
-                      updated.items[index].shopping = !updated.items[index].shopping;
-                      setEditedList(updated);
-                    }}
-                    style={{
-                      marginLeft: "auto",
-                      fontSize: "18px",
-                      cursor: "pointer",
-                      background: "none",
-                      border: "none",
-                    }}>
-                    {item.shopping ? "❌" : "🛒"}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <p className={styles.modalDate}>{new Date(editedList.dateOfTrip).toLocaleDateString()}</p>
+            <PackItemsEditor
+              items={editedList.items}
+              setItems={(items) => setEditedList({ ...editedList, items })}
+              mode="view"
+            />
+
             <div className={styles.modalButtons}>
-              <button
-                className={styles.modalBtn}
-                onClick={saveListChanges}>
-                Save List
-              </button>
+              <button className={styles.modalBtn} onClick={saveListChanges}>Save</button>
             </div>
           </div>
         </div>

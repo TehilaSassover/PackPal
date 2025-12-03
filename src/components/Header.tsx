@@ -10,32 +10,36 @@ export default function Header() {
   const userStore = useUserStore((state) => state.user);
   const logout = useUserStore((state) => state.logout);
 
-  const handleLogout = () => {
-    logout();
-  };
+  const tabs = [
+    { href: "/", label: "Home", match: "/" },
+    { href: "/lists", label: "Lists", match: "/lists" },
+    { href: "/my-pack/my-lists", label: "My Pack", match: "/my-pack" },
+    { href: "/community", label: "Community List", match: "/community" },
+  ];
 
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <Link href="/"><img src="/logo.png" alt="Ludo Logo" className={styles.logoImg} /></Link>
+        <Link href="/"> <img src="/logo.png" alt="Ludo Logo" className={styles.logoImg} /></Link>
       </div>
       <nav className={styles.nav}>
-        <Link href="/"
-          className={`${styles.link} ${pathname === "/" ? styles.active : ""}`}>Home
-        </Link>
-        <Link href="/lists"
-          className={`${styles.link} ${pathname === "/lists" ? styles.active : ""}`}>Lists
-        </Link>
-        <Link href="/my-pack/my-lists"
-          className={`${styles.link} ${(pathname && pathname.startsWith('/my-pack')) || pathname === "/my-lists" ? styles.active : ""}`}>My Pack
-        </Link>
-        <Link href="/community"
-          className={`${styles.link} ${pathname === "/community-list" ? styles.active : ""}`}>Community List
-        </Link>
+        {tabs.map(tab => (
+          <Link
+            key={tab.href}
+            href={tab.href}
+            className={`${styles.link} ${(tab.match === "/" ? pathname === "/" : pathname.startsWith(tab.match))
+              ? styles.active
+              : ""
+              }`}
+          >
+            {tab.label}
+          </Link>
+        ))}
       </nav>
       <div className={styles.loginContainer}>
         <ProfileMenu />
       </div>
     </header>
+
   );
 }
