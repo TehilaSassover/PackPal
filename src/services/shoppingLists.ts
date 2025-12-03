@@ -1,6 +1,6 @@
-import { shoppingList } from "@/app/types/lists";
+import { ShoppingList } from "@/app/types/lists";
 
-export async function getAllShoppingListAPI(userId: string): Promise<shoppingList[]> {
+export async function getAllShoppingListAPI(userId: string): Promise<ShoppingList[]> {
   const res = await fetch(`/api/shopping?userId=${encodeURIComponent(userId)}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
@@ -11,6 +11,6 @@ export async function getAllShoppingListAPI(userId: string): Promise<shoppingLis
     throw new Error(errorData?.error || "Error fetching shopping lists");
   }
 
-  const data: shoppingList[] = await res.json();
+  const data: ShoppingList[] = await res.json();
   return data;
 }

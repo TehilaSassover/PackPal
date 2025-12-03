@@ -139,6 +139,7 @@ export function PackItemsEditor({ items, setItems, mode }: Props) {
           <button onClick={addItem} className={styles.addBtn}>+</button>
         </div>
       )}
+      <button onClick={handleSaveAll}>save all</button>
     </div>
   );
 }
