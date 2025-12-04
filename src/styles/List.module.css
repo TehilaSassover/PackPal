@@ -18,10 +18,11 @@
 
 .listGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 160px); /* רוחב קבוע לכרטיסים */
-  gap: 20px; /* הרווח בין הכרטיסים */
-  justify-content: start; /* מונע רווח גמיש שמשתנה */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;               /* ריווח בין הכרטיסים */
+  justify-content: start;  /* אפשר גם center אם רוצים למרכז את הרשת */
 }
+
 
 /* רספונסיביות */
 @media (max-width: 640px) {

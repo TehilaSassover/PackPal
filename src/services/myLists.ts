@@ -29,7 +29,7 @@ export async function updateList(listId: string, updatedList: PackList): Promise
   return data;
 }
 export async function getListByIdAPI(id: string) {
-  const res = await fetch(`/api/lists/${id}`);
+  const res = await fetch(`/api/myLists/${id}`);
   if (!res.ok) throw new Error("Failed to fetch list");
   return res.json();
 }

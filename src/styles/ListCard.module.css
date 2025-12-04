@@ -1,38 +1,64 @@
 .card {
-  width: 160px;
-  height: 120px;
-  background: #f3f3f3;
-  border-radius: 12px;
-  border: none;
+  width: 230px;                 /* תואם ל-MyLists */
+  height: 110px;                /* קצת יותר גבוה */
+  background: #e9e7e7;          /* צבע רקע תואם */
+  border-radius: 14px;          /* פינות עגולות */
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 12px;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .topButton {
-  background: #FF3B30;
+  background: #ff3b30;          /* אדום כמו MyLists */
   color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
+  font-weight: bold;
+  padding: 14px 26px;
+  border-radius: 30px;
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
-.dots {
-  margin-top: 25px;
-  font-size: 20px;
-  letter-spacing: 3px;
+.actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.iconBtn {
+  background: #4a4a4a;
+  color: white;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.iconBtn:hover {
+  background: #383838;
+}
+
+.itemCount {
+  font-size: 16px;
+  color: #333;
 }
 
 .selected {
-  outline: 3px solid #FF3B30;
+  outline: 3px solid #ff3b30;
 }

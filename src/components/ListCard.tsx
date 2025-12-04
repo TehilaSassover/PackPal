@@ -10,11 +10,12 @@ export default function ListCard({
   onSelect,
 }: ListCardProps) {
   return (
-    <button className={`${styles.card} ${isSelected ? styles.selected : ""}`} onClick={onSelect}>
+    <div
+      className={`${styles.card} ${isSelected ? styles.selected : ""}`}
+      onClick={onSelect}
+    >
       <div className={styles.topButton}>{name}</div>
-      <div className={styles.dots}>...</div>
-    </button>
 
+    </div>
   );
 }
-
