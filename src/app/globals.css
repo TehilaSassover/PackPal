@@ -1,0 +1,27 @@
+@font-face {
+    font-family: "Knewave";
+    src: url("../../public/fonts/Knewave-Regular.ttf") format("truetype");
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol {
+    font-family: 'Varela Round', sans-serif;
+}
