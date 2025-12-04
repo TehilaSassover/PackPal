@@ -39,29 +39,36 @@ export async function getListById(listId: string) {
 
 export async function addListToUserLists(userId: string, listId: string) {
   if (!userId || !listId) throw new Error("Missing userId or listId"); 
+
   const userObjectId = new ObjectId(userId);
   const listObjectId = new ObjectId(listId);
   const client = await clientPromise;
   const db = client.db("packpal");
+
   const originalList = await db.collection("lists").findOne({
     _id: listObjectId,
   });
   
-  if (!originalList) {
-    throw new Error("List not found");
-  }
-    const userList = {
+  if (!originalList) {throw new Error("List not found");}
+  const fixedItems = originalList.defaultItems.map((item: any) => ({
+    name: item.name,
+    quantity: item.quantity,
+    shopping: item.shopping ?? false,
+    isPacked: item.isPacked ?? false,
+  }));
+  const userList = {
     title: originalList.name,
     description: "",
     createdBy: userObjectId.toString(),
     dateOfTrip: originalList.dateOfTrip,
-    items: originalList.defaultItems,
+    items: fixedItems, 
     createdAt: new Date(),
     updatedAt: new Date(),
   }; 
   const result = await db.collection("usersLists").insertOne(userList);
   return result.insertedId;
 }
+
 export async function updateListById(listId: string, updatedList: any) {
   if (!listId) throw new Error("Missing listId");
   const client = await clientPromise;

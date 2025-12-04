@@ -58,7 +58,14 @@ export interface ShoppingList{
   _id:ObjectId,
   userId:string,
   listId:string,
-  item:string,
+  name:string,
+  quantity:number,
+  createdAt:Date
+}
+export interface NewShoppingList{
+  userId:string,
+  listId:string,
+  name:string,
   quantity:number,
   createdAt:Date
 }

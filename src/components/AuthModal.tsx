@@ -37,6 +37,5 @@ export default function AuthModal({ children }: AuthModalProps) {
   }, [user, openMenu, closeMenu]);
 
   if (!user) return <SimulationBackground />;
-
   return <>{children}</>;
 }
