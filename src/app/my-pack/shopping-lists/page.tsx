@@ -21,7 +21,7 @@ export default function ShoppingListsPage() {
     <div style={{ padding: "20px" }}>
       <h1>Shopping Lists</h1>
       {shoppingLists.map(list => (
-        <ShoppingItem key={list._id.toString()} item={list.item} quantity={list.quantity} />
+        <ShoppingItem key={list._id.toString()} name={list.name} quantity={list.quantity} />
       ))}
     </div>
   );
