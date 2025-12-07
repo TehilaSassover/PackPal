@@ -50,6 +50,7 @@ export async function PUT(req: NextRequest) {
   try {
     const data = await req.json(); // ✅ רק פעם אחת
     const id = data.id || data._id;
+    console.log("✔ Received data for update:", data);
     if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
     const { id: _, _id: __, ...updatedList } = data;
 

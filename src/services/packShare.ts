@@ -35,6 +35,5 @@ Promise<UpdateResult<Document>>{
     body: JSON.stringify({ shareId, userEmail ,type}),
   });
   const data = await res.json();
-console.log("dataaaaaa" + JSON.stringify(data));
   return data; 
 }

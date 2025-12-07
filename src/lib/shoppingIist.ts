@@ -7,7 +7,6 @@ export async function getShoppingListsByUserId(userId: string) {
     .collection("shoppingList")
     .find({ userId })
     .toArray();
-  console.log("RESULT:", shoppingLists);
   return shoppingLists;
 }
 export async function addShoppingListBulk(items: NewShoppingList[]) {
