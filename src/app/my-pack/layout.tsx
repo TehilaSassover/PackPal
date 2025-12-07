@@ -1,13 +1,29 @@
 "use client";
 
-import AuthModal from "@/components/AuthModal";
+import { useEffect } from "react";
 import RightSideMenu from "@/components/RightSideMenu";
+import UsagePreview from "@/components/UsagePreview";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
-export default function MyPackLayout({ children }: { children: React.ReactNode }) {
+interface MyPackLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function MyPackLayout({ children }: MyPackLayoutProps) {
+  const { user, requireAuth } = useRequireAuth();
+
+  useEffect(() => {
+    if (!user) {
+      requireAuth(() => {}); 
+    }
+  }, [user, requireAuth]);
+
+  if (!user) return <UsagePreview />;
+
   return (
-    <AuthModal>
-      <RightSideMenu />
+    <>
       {children}
-    </AuthModal>
+      <RightSideMenu />
+    </>
   );
 }
