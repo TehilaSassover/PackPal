@@ -3,7 +3,7 @@ import { useUserStore } from "@/store/userStore";
 import { useEffect, useState } from "react";
 import { FaTrash, FaExternalLinkAlt, FaEdit } from "react-icons/fa";
 import styles from "@/styles/MyLists.module.css";
-import { getUserLists } from "@/services/myLists";
+import { deleteListByIdAPI, getUserLists } from "@/services/myLists";
 import { PackList } from "@/app/types/lists";
 import EditList from "./EditList";
 export default function MyLists() {
@@ -15,13 +15,22 @@ export default function MyLists() {
   useEffect(() => {
     if (!user) return;
     getUserLists(user._id).then(setLists);
-  }, [user]);
+  }, []);
   const saveListChanges = (updatedList: PackList) => {
     setLists((prev) =>
       prev.map((l) => (l._id === updatedList._id ? updatedList : l))
     );
     setSelectedList(null);
     setEditedList(null);
+  };
+  const deleteList = (listId:string) => {
+    alert(`Delete list with id: ${listId} (functionality not implemented)`);
+    deleteListByIdAPI(listId).then(() => {
+      setLists((prev) => prev.filter((l) => l._id !== listId));
+    }).catch
+    (error => {
+      console.error("Failed to delete list:", error);
+    });
   };
   return (
     <div className={styles.wrapper}>
@@ -38,7 +47,8 @@ export default function MyLists() {
               {list.title}
             </span>
             <div className={styles.actions}>
-              <button type="button" className={styles.iconBtn}>
+              <button type="button" className={styles.iconBtn} onClick={() => deleteList(list._id)}
+>
                 <FaTrash />
               </button>
               <button type="button" className={styles.iconBtn}>
