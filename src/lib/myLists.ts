@@ -22,7 +22,6 @@ export async function getListById(listId: string) {
     .collection("usersLists")
     .findOne({ _id: new ObjectId(listId) });
   if (!list) return null;
-
   return {
     _id: list._id.toString(),
     title: list.title,
@@ -37,16 +36,13 @@ export async function getListById(listId: string) {
 
 export async function addListToUserLists(userId: string, listId: string) {
   if (!userId || !listId) throw new Error("Missing userId or listId");
-
   const userObjectId = new ObjectId(userId);
   const listObjectId = new ObjectId(listId);
   const client = await clientPromise;
   const db = client.db("packpal");
-
   const originalList = await db.collection("lists").findOne({
     _id: listObjectId,
   });
-
   if (!originalList) { throw new Error("List not found"); }
   const fixedItems = originalList.defaultItems.map((item: any) => ({
     name: item.name,
@@ -66,7 +62,6 @@ export async function addListToUserLists(userId: string, listId: string) {
   const result = await db.collection("usersLists").insertOne(userList);
   return result.insertedId;
 }
-
 export async function updateListById(listId: string, updatedList: any) {
   if (!listId) throw new Error("Missing listId");
   const client = await clientPromise;
@@ -78,17 +73,23 @@ export async function updateListById(listId: string, updatedList: any) {
     { $set: updatedList },
     { returnDocument: "after" }
   );
-
-
-  // תמיכה בשני סוגי תוצאות
   const updatedDoc = result?.value || result;
-
   if (!updatedDoc) {
     console.error("❌ No document found to update:", { listId, updatedList });
     return null;
   }
-
-
   return { result: "success" };
 }
-
+export async function deleteListById(listId: string) {
+  if (!listId) throw new Error("Missing listId");
+  const client = await clientPromise;
+  const db = client.db("packpal");
+  const result = await db
+    .collection("usersLists")
+    .deleteOne({ _id: new ObjectId(listId) });
+    if (result.deletedCount === 0) {
+      console.error("❌ No document found to delete with id:", listId);
+      return false;
+    }
+  return result.deletedCount === 1;
+}
