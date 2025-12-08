@@ -2,7 +2,7 @@
 
 import styles from "@/styles/AlertModal.module.css";
 
-interface AlertModalProps {
+export interface AlertModalProps {
   type: "success" | "error" | "confirm";
   message: string;
   onClose: () => void;
