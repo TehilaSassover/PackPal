@@ -70,7 +70,6 @@ export default function ListDetailPage() {
           <AddToMyListButton
             listId={list._id}
             buttonClassName={styles.addButton}
-            errorClassName={styles.errorMessage}
             variant="detail"
           />
         </div>
