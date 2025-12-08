@@ -7,16 +7,13 @@ export async function GET(
 ) {
   try {
     const { id } = await context.params;
-
     if (!id) {
       return NextResponse.json({ error: "Missing list id" }, { status: 400 });
     }
-
     const list = await getListById(id);
-
     if (!list) {
       return NextResponse.json({ error: "List not found" }, { status: 404 });
-    }
+   }
 
     return NextResponse.json(list);
   } catch (error) {

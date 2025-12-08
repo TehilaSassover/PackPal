@@ -2,10 +2,14 @@
   max-width: 500px;
   margin: 0 auto;
   padding: 16px;
-  background-color: #fff;
-  border-radius: 8px;
+  /* background-color: #fff; */
+  /* border-radius: 8px; */
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   font-family: Arial, sans-serif;
+  /* min-height: 300px;   */
+  /* max-height: 100vh;  */
+  /* overflow-y: auto; */
+
 }
 
 .section {
@@ -68,9 +72,11 @@
 }
 
 .saveButton {
+   margin: 10px auto 0; 
+  display: block;  
   margin-top: 10px;
   padding: 8px 16px;
-  background-color: #4caf50;
+  background-color: #ff3131;
   color: white;
   border: none;
   border-radius: 4px;
@@ -78,5 +84,5 @@
 }
 
 .saveButton:hover {
-  background-color: #45a049;
+  background-color: #737373;
 }

@@ -3,37 +3,26 @@ import { useUserStore } from "@/store/userStore";
 import { useEffect, useState } from "react";
 import { FaTrash, FaExternalLinkAlt, FaEdit } from "react-icons/fa";
 import styles from "@/styles/MyLists.module.css";
-import { getUserLists, updateList } from "@/services/myLists";
+import { getUserLists } from "@/services/myLists";
 import { PackList } from "@/app/types/lists";
 import EditList from "./EditList";
-
 export default function MyLists() {
   const user = useUserStore((state) => state.user);
   const [lists, setLists] = useState<PackList[]>([]);
   const [selectedList, setSelectedList] = useState<PackList | null>(null);
   const [editedList, setEditedList] = useState<PackList | null>(null);
-
+  const [mode, setMode] = useState<"view" | "edit">("view");
   useEffect(() => {
     if (!user) return;
     getUserLists(user._id).then(setLists);
   }, [user]);
-
-  async function saveListChanges() {
-    if (!editedList) return;
-    try {
-      await updateList(editedList._id, editedList);
-      setLists((prev) =>
-        prev.map((l) => (l._id === editedList._id ? editedList : l))
-      );
-      // סוגרים את המודאל
-      setSelectedList(null);
-      setEditedList(null);
-    } catch (error) {
-      console.error("Error saving list:", error);
-      alert("There was an error saving the list. Please try again.");
-    }
-  }
-
+  const saveListChanges = (updatedList: PackList) => {
+    setLists((prev) =>
+      prev.map((l) => (l._id === updatedList._id ? updatedList : l))
+    );
+    setSelectedList(null);
+    setEditedList(null);
+  };
   return (
     <div className={styles.wrapper}>
       {lists.map((list) => (
@@ -41,11 +30,11 @@ export default function MyLists() {
           <div className={styles.header}>
             <span
               className={styles.titleTag}
-              onClick={() => {
+              onClick={() => {   
                 setSelectedList(list);
                 setEditedList(structuredClone(list));
-              }}
-            >
+                setMode("view");
+              }}>
               {list.title}
             </span>
             <div className={styles.actions}>
@@ -61,54 +50,32 @@ export default function MyLists() {
                 onClick={() => {
                   setSelectedList(list);
                   setEditedList(structuredClone(list));
-                }}
-              >
+                  setMode("edit");
+                }}>
                 <FaEdit />
               </button>
             </div>
           </div>
         </div>
       ))}
-
       {selectedList && editedList && (
         <div
           className={styles.modalBackdrop}
           onClick={() => {
             setSelectedList(null);
             setEditedList(null);
-          }}
-        >
+          }}>
           <div
             className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
+            onClick={(e) => e.stopPropagation()}>
             <EditList
               initialList={editedList}
-              mode="edit"
+              mode={mode}
               onClose={() => {
                 setSelectedList(null);
                 setEditedList(null);
               }}
-            />
-            <div className={styles.modalButtons}>
-              <button
-                className={styles.modalBtn}
-                type="button"
-                onClick={saveListChanges}
-              >
-                Save
-              </button>
-              <button
-                className={styles.modalBtn}
-                type="button"
-                onClick={() => {
-                  setSelectedList(null);
-                  setEditedList(null);
-                }}
-              >
-                Cancel
-              </button>
-            </div>
+              onSave={saveListChanges}/>
           </div>
         </div>
       )}

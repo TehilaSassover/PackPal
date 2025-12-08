@@ -21,7 +21,6 @@ export async function getListById(id: string): Promise<PackList | null> {
     const db = client.db("packpal");
 
     const list = await db.collection("lists").findOne({ _id: new ObjectId(id) });
-console.log("Fetched list:", list);
     return list as PackList | null;
   } catch (error) {
     console.error("Error fetching list by ID:", error);

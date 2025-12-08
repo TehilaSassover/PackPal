@@ -5,13 +5,12 @@ export async function getListsByUserId(userId: string) {
   if (!userId) throw new Error("Missing userId");
   const id = new ObjectId(userId);
   const client = await clientPromise;
-  const db = client.db("packpal"); 
+  const db = client.db("packpal");
   const lists = await db
     .collection("usersLists")
-    .find({ createdBy: userId }) 
+    .find({ createdBy: userId })
     .toArray();
-console.log(JSON.stringify(lists, null, 2));
-    
+
   return lists;
 }
 export async function getListById(listId: string) {
@@ -22,7 +21,6 @@ export async function getListById(listId: string) {
   const list = await db
     .collection("usersLists")
     .findOne({ _id: new ObjectId(listId) });
-
   if (!list) return null;
 
   return {
@@ -38,7 +36,7 @@ export async function getListById(listId: string) {
 }
 
 export async function addListToUserLists(userId: string, listId: string) {
-  if (!userId || !listId) throw new Error("Missing userId or listId"); 
+  if (!userId || !listId) throw new Error("Missing userId or listId");
 
   const userObjectId = new ObjectId(userId);
   const listObjectId = new ObjectId(listId);
@@ -48,8 +46,8 @@ export async function addListToUserLists(userId: string, listId: string) {
   const originalList = await db.collection("lists").findOne({
     _id: listObjectId,
   });
-  
-  if (!originalList) {throw new Error("List not found");}
+
+  if (!originalList) { throw new Error("List not found"); }
   const fixedItems = originalList.defaultItems.map((item: any) => ({
     name: item.name,
     quantity: item.quantity,
@@ -61,10 +59,10 @@ export async function addListToUserLists(userId: string, listId: string) {
     description: "",
     createdBy: userObjectId.toString(),
     dateOfTrip: originalList.dateOfTrip,
-    items: fixedItems, 
+    items: fixedItems,
     createdAt: new Date(),
     updatedAt: new Date(),
-  }; 
+  };
   const result = await db.collection("usersLists").insertOne(userList);
   return result.insertedId;
 }
@@ -74,17 +72,23 @@ export async function updateListById(listId: string, updatedList: any) {
   const client = await clientPromise;
   const db = client.db("packpal");
   const listsCollection = db.collection("usersLists");
+
   const result = await listsCollection.findOneAndUpdate(
     { _id: new ObjectId(listId) },
     { $set: updatedList },
     { returnDocument: "after" }
   );
-  if (!result || !result.value) {
-    console.error("❌ No document found to update");
+
+
+  // תמיכה בשני סוגי תוצאות
+  const updatedDoc = result?.value || result;
+
+  if (!updatedDoc) {
+    console.error("❌ No document found to update:", { listId, updatedList });
     return null;
   }
-  return {
-    ...result.value,
-    _id: result.value._id.toString(),
-  };
+
+
+  return { result: "success" };
 }
+

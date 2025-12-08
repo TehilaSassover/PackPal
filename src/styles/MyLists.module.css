@@ -1,8 +1,21 @@
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   padding: 30px;
+  margin-right: 220px;
+}
+
+@media (max-width: 1024px) {
+  .wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
 }
 
 .card {
@@ -68,13 +81,13 @@
 .modalContent {
   background: #f0ecec;
   padding: 35px;
-  border-radius: 16px;
+  /* border-radius: 16px; */
   width: 520px;
   max-width: 600px;
-  max-height: 70vh;
+  max-height:80vh;
   overflow-y: auto;
   text-align: left;
-  padding: "25px"
+  /* padding: "25px" */
 }
 .modalTitle {
   text-align: center;
