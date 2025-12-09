@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ListCard from "@/components/ListCard";
 import ListSidePanel from "@/components/ListSidePanel";
 import styles from "@/styles/List.module.css";
-import {List } from '@/app/types/lists';
+import { List } from '@/app/types/lists';
 import { getAllLists } from "@/services/lists";
 
 export default function Lists() {
@@ -16,20 +16,20 @@ export default function Lists() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [addedToMyLists, setAddedToMyLists] = useState<Set<string>>(new Set());
 
-useEffect(() => {
-  const fetchLists = async () => {
-    try {
-      const data = await getAllLists();
-      setLists(data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchLists = async () => {
+      try {
+        const data = await getAllLists();
+        setLists(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchLists();
-}, []);
+    fetchLists();
+  }, []);
 
 
   const selectedList = lists.find((list) => list._id === selectedListId) || null;

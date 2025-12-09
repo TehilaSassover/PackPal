@@ -8,4 +8,3 @@ export default function MyComponent() {
     return <div>No ID provided</div>;
   }
   return <ListDetails listId={id} source="list" />; // שולחים את id כפרופס
-}

@@ -1,0 +1,78 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  text-align: center;
+  animation: fadeIn 0.2s ease;
+}
+
+/* טיפוסי הודעות */
+.success {
+  border-left: 5px solid #4CAF50;
+}
+
+.error {
+  border-left: 5px solid #FF3B30;
+}
+
+.confirm {
+  border-left: 5px solid #FF9500;
+}
+
+.message {
+  margin-bottom: 18px;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* כפתורים */
+.closeBtn,
+.cancelBtn,
+.confirmBtn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Success/Error OK */
+.closeBtn {
+  background: #FF3B30;
+  color: white;
+}
+
+/* Confirm כפתורים */
+.confirmBtn {
+  background: #FF3B30;
+  color: white;
+}
+
+.cancelBtn {
+  background: #ddd;
+  color: #333;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1);    }
+}

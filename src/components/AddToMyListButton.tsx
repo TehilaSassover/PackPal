@@ -1,40 +1,40 @@
 'use client';
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useUserStore } from "@/store/userStore";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { useAlert } from "@/hooks/useAlert"; // <-- כאן
+import AlertModal from "@/components/AlertModal";
+import { createPortal } from "react-dom";
 
 interface AddToMyListButtonProps {
   listId: string;
   onSuccess?: () => void;
   buttonClassName?: string;
-  errorClassName?: string;
-  variant?: 'panel' | 'detail'; // 'panel' for side panel, 'detail' for detail page
+  variant?: 'panel' | 'detail';
 }
 
 export default function AddToMyListButton({
   listId,
   onSuccess,
   buttonClassName,
-  errorClassName,
   variant = 'detail',
 }: AddToMyListButtonProps) {
   const router = useRouter();
-  const { user } = useUserStore();
   const [adding, setAdding] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  const { requireAuth, user } = useRequireAuth();
+  const { showAlert, showConfirm, getAlertProps } = useAlert();
 
   const handleAddToMyLists = async () => {
-    // בדיקה האם המשתמש מחובר
+    // המשתמש לא מחובר → הודעה + הפניה ללוגין
     if (!user) {
-      setError("Please log in first to add lists");
-      setTimeout(() => setError(null), 3000);
-      // הפנה ללוגין
-      router.push("/login");
+      showAlert("You must log in to add lists.", "error");
+      requireAuth(() => {}); // פותח את חלון ההרשמה
       return;
     }
 
     setAdding(true);
-    setError(null);
 
     try {
       const response = await fetch("/api/myLists", {
@@ -47,23 +47,24 @@ export default function AddToMyListButton({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add list");
+        throw new Error("Failed to add list.");
       }
 
-      // קריאה callback אם הוגדר
-      if (onSuccess) {
-        onSuccess();
-      }
+      // הצלחה → הצגת הודעה
+      showAlert("The list was added successfully!", "success");
 
-      // הפנה לעמוד האישי (עם עיכוב קטן כדי שהמשתמש יראה את ההודעה)
-      setTimeout(() => {
-        router.push("/my-pack/my-lists");
-      }, 500);
+      if (onSuccess) onSuccess();
+
+      router.push("/my-pack/my-lists");
+
     } catch (err: any) {
-      setError(err.message || "Error adding list");
+      showAlert(err.message || "Error adding list.", "error");
+    } finally {
       setAdding(false);
     }
   };
+
+  const alertProps = getAlertProps();
 
   return (
     <>
@@ -72,13 +73,12 @@ export default function AddToMyListButton({
         onClick={handleAddToMyLists}
         disabled={adding}
       >
-        {adding ? 'Adding...' : 'Add to My Lists'}
+        {adding ? "Adding..." : "Add to My Lists"}
       </button>
-      {error && (
-        <p className={errorClassName} style={{ color: "red" }}>
-          {error}
-        </p>
-      )}
+
+      {/* חלון ההודעה */}
+      {alertProps &&
+        createPortal(<AlertModal {...alertProps} />, document.body)}
     </>
   );
 }
