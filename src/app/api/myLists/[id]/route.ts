@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getListById ,deleteListById} from "@/lib/myLists";
 
-export async function GET(
-  req: NextRequest,
+export async function GET( req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {

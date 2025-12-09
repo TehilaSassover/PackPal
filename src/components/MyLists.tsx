@@ -3,15 +3,17 @@ import { useUserStore } from "@/store/userStore";
 import { useEffect, useState } from "react";
 import { FaTrash, FaExternalLinkAlt, FaEdit } from "react-icons/fa";
 import styles from "@/styles/MyLists.module.css";
-import { deleteListByIdAPI, getUserLists } from "@/services/myLists";
+import { deleteListByIdAPI, getUserLists, openListAloneApi } from "@/services/myLists";
 import { PackList } from "@/app/types/lists";
 import EditList from "./EditList";
+import { useRouter } from "next/navigation";
 export default function MyLists() {
   const user = useUserStore((state) => state.user);
   const [lists, setLists] = useState<PackList[]>([]);
   const [selectedList, setSelectedList] = useState<PackList | null>(null);
   const [editedList, setEditedList] = useState<PackList | null>(null);
   const [mode, setMode] = useState<"view" | "edit">("view");
+  const router=useRouter();
   useEffect(() => {
     if (!user) return;
     getUserLists(user._id).then(setLists);
@@ -23,15 +25,18 @@ export default function MyLists() {
     setSelectedList(null);
     setEditedList(null);
   };
-  const deleteList = (listId:string) => {
+  const deleteList = (listId: string) => {
     alert(`Delete list with id: ${listId} (functionality not implemented)`);
     deleteListByIdAPI(listId).then(() => {
       setLists((prev) => prev.filter((l) => l._id !== listId));
     }).catch
-    (error => {
-      console.error("Failed to delete list:", error);
-    });
+      (error => {
+        console.error("Failed to delete list:", error);
+      });
   };
+  const openList = (listId: string) => {
+    router.push(`/my-pack/my-lists/${listId}`);   
+  }
   return (
     <div className={styles.wrapper}>
       {lists.map((list) => (
@@ -39,7 +44,7 @@ export default function MyLists() {
           <div className={styles.header}>
             <span
               className={styles.titleTag}
-              onClick={() => {   
+              onClick={() => {
                 setSelectedList(list);
                 setEditedList(structuredClone(list));
                 setMode("view");
@@ -48,10 +53,10 @@ export default function MyLists() {
             </span>
             <div className={styles.actions}>
               <button type="button" className={styles.iconBtn} onClick={() => deleteList(list._id)}
->
+              >
                 <FaTrash />
               </button>
-              <button type="button" className={styles.iconBtn}>
+              <button type="button" className={styles.iconBtn} onClick={() => openList(list._id)}>
                 <FaExternalLinkAlt />
               </button>
               <button
@@ -85,7 +90,7 @@ export default function MyLists() {
                 setSelectedList(null);
                 setEditedList(null);
               }}
-              onSave={saveListChanges}/>
+              onSave={saveListChanges} />
           </div>
         </div>
       )}
