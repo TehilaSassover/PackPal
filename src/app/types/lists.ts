@@ -30,6 +30,7 @@ export interface List {
   _id: string;
   name: string;
   defaultItems: Item[];
+  items: Item[];
 }
 
 export interface ListSidePanelProps {
@@ -45,8 +46,8 @@ export interface ListEditorProps {
   onSave: (updatedList: PackList) => void;
 }
 export interface PackShare {
-  _id?: ObjectId;        // מזהה ייחודי של השיתוף, מסוג מחרוזת
-  firstName: string;   // שם פרטי
+  _id?: ObjectId;        
+  firstName: string;   
   lastName: string;    // שם משפחה
   email: string;       // אימייל
   content: string;     // תוכן ההערה / השיתוף
