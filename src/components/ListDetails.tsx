@@ -83,7 +83,7 @@ export default function ListDetails({ listId, source }: ListDetailsProps) {
                         <AddToMyListButton
                             listId={list._id}
                             buttonClassName={styles.addButton}
-                            errorClassName={styles.errorMessage}
+                            // errorClassName={styles.errorMessage}
                             variant="detail"/>
                     </div>
                 )}

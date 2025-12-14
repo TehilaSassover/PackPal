@@ -9,3 +9,4 @@ export default function MyComponent() {
   }
   return <ListDetails listId={id} source="list" />;  
 }
+
