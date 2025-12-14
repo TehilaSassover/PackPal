@@ -15,7 +15,6 @@ export async function getListsByUserId(userId: string) {
 }
 export async function getListById(listId: string) {
   if (!listId) throw new Error("Missing listId");
-
   const client = await clientPromise;
   const db = client.db("packpal");
   const list = await db

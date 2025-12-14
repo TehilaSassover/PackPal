@@ -29,3 +29,10 @@ export async function deleteListAPI(id: string) {
   if (!res.ok) throw new Error("Failed to delete list");
   return res.json();
 }
+export async function openListAloneApi(listId: string) {
+   const res = await fetch(`/api/myLists/${listId}`, {
+    method: "GET",
+  });
+  if (!res.ok) throw new Error("Failed to fetch list");
+  return res.json();
+}

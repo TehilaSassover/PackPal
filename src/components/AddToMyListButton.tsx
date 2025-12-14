@@ -27,7 +27,6 @@ export default function AddToMyListButton({
   const { showAlert, showConfirm, getAlertProps } = useAlert();
 
   const handleAddToMyLists = async () => {
-    // המשתמש לא מחובר → הודעה + הפניה ללוגין
     if (!user) {
       showAlert("You must log in to add lists.", "error");
       requireAuth(() => {}); // פותח את חלון ההרשמה
