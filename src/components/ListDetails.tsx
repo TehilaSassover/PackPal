@@ -72,7 +72,7 @@ export default function ListDetails({ listId, source }: ListDetailsProps) {
                                 {itemsToShow.map((item, index) => (
                                     <tr key={index}>
                                         <td>{item.name}</td>
-                                        <td className={styles.quantity}>{item.qty}</td>
+                                        <td className={styles.quantity}>{item.quantity}</td>
                                     </tr>
                                 ))}
                             </tbody>

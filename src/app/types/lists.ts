@@ -23,7 +23,7 @@ export interface ListCardProps {
 }
 export interface Item {
   name: string;
-  qty: number;
+  quantity: number;
 }
 
 export interface List {
