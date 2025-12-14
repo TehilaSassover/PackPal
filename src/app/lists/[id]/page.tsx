@@ -7,5 +7,5 @@ export default function MyComponent() {
   if (!id) {
     return <div>No ID provided</div>;
   }
-  return <ListDetails listId={id} source="list" />; // שולחים את id כפרופס
+  return <ListDetails listId={id} source="list" />;  
 }

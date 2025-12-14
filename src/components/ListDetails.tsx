@@ -9,14 +9,12 @@ import { openListAloneApi } from '@/services/myLists';
 interface ListDetailsProps {
     listId: string;
     source?: 'list' | 'my-lists';
-
 }
 export default function ListDetails({ listId, source }: ListDetailsProps) {
     const router = useRouter();
     const [list, setList] = useState<List | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
     useEffect(() => {
         if (!listId) return;
         const fetchList = async () => {
@@ -25,11 +23,13 @@ export default function ListDetails({ listId, source }: ListDetailsProps) {
                 if (source === 'list') {
                     data = await getListById(listId);
                 }
-
                 else {
                     data = await openListAloneApi(listId);
+                    data.items = data.items?.map((item: any) => ({
+                        ...item,
+                        qty: item.quantity,
+                    }));
                 }
-
                 setList(data);
                 console.log("Fetched list data:", data);
             } catch (err: any) {
@@ -38,17 +38,14 @@ export default function ListDetails({ listId, source }: ListDetailsProps) {
                 setLoading(false);
             }
         };
-
         fetchList();
     }, []);
 
     if (loading) return <div className={styles.container}>Loading...</div>;
     if (error) return <div className={styles.container}>Error: {error}</div>;
     if (!list) return <div className={styles.container}>List not found</div>;
-  const itemsToShow = (list.items?.length ? list.items : list.defaultItems) ?? [];
-
-
-
+    const itemsToShow = (list.items?.length ? list.items : list.defaultItems) ?? [];
+    console.log("Items to show:", itemsToShow);
     return (
         <div className={styles.container}>
             <button className={styles.backButton} onClick={() => router.back()}>
@@ -75,23 +72,21 @@ export default function ListDetails({ listId, source }: ListDetailsProps) {
                                 {itemsToShow.map((item, index) => (
                                     <tr key={index}>
                                         <td>{item.name}</td>
-                                        <td className={styles.quantity}>{item.quantity}</td>
+                                        <td className={styles.quantity}>{item.qty}</td>
                                     </tr>
                                 ))}
                             </tbody>
-                        </table>
-                    )}
+                            </table>)}
                 </div>
-
-                <div className={styles.actionSection}>
-                    <AddToMyListButton
-                        listId={list._id}
-                        buttonClassName={styles.addButton}
-                        errorClassName={styles.errorMessage}
-                        variant="detail"
-                    />
-                </div>
+                {source === 'list' && (
+                    <div className={styles.actionSection}>
+                        <AddToMyListButton
+                            listId={list._id}
+                            buttonClassName={styles.addButton}
+                            errorClassName={styles.errorMessage}
+                            variant="detail"/>
+                    </div>
+                )}
             </div>
-        </div>
-    );
+        </div>);
 }

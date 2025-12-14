@@ -23,7 +23,7 @@ export interface ListCardProps {
 }
 export interface Item {
   name: string;
-  quantity: number;
+  qty: number;
 }
 
 export interface List {
@@ -48,12 +48,12 @@ export interface ListEditorProps {
 export interface PackShare {
   _id?: ObjectId;        
   firstName: string;   
-  lastName: string;    // שם משפחה
-  email: string;       // אימייל
-  content: string;     // תוכן ההערה / השיתוף
-  date: Date;         // תאריך, מסוג Date
-like:Array<string>; // מערך של מיילים של משתמשים שאהבו את השיתוף
-dislike:Array<string>; // מערך של מיילים של משתמשים שלא אהבו את השיתוף
+  lastName: string;    
+  email: string;       
+  content: string;      
+  date: Date;        
+like:Array<string>;
+dislike:Array<string>; 
 }
 export interface ShoppingList{
   _id:ObjectId,
