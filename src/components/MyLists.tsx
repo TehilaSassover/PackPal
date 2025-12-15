@@ -16,8 +16,15 @@ export default function MyLists() {
   const router=useRouter();
   useEffect(() => {
     if (!user) return;
-    getUserLists(user._id).then(setLists);
-  }, []);
+     getUserLists(user._id)
+    .then((data) => {
+      setLists(data);
+      if (data.length === 0) {
+        alert("You have no lists yet. Start by creating a new list!");
+      }
+    })
+    .catch(err => console.log(err));
+}, []);
   const saveListChanges = (updatedList: PackList) => {
     setLists((prev) =>
       prev.map((l) => (l._id === updatedList._id ? updatedList : l))
@@ -38,6 +45,7 @@ export default function MyLists() {
     router.push(`/my-pack/my-lists/${listId}`);   
   }
   return (
+  
     <div className={styles.wrapper}>
       {lists.map((list) => (
         <div key={list._id} className={styles.card}>
