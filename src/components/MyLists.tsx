@@ -52,8 +52,7 @@ export default function MyLists() {
               {list.title}
             </span>
             <div className={styles.actions}>
-              <button type="button" className={styles.iconBtn} onClick={() => deleteList(list._id)}
-              >
+              <button type="button" className={styles.iconBtn} onClick={() => deleteList(list._id)}>
                 <FaTrash />
               </button>
               <button type="button" className={styles.iconBtn} onClick={() => openList(list._id)}>
