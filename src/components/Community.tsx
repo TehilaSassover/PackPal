@@ -5,6 +5,7 @@ import { PackShare } from "@/app/types/lists";
 import Share from "@/components/Share";
 import styles from "@/styles/PackSharesCommponent.module.css";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { useAlert } from "@/hooks/useAlert";
 
 export default function PackShareComponent() {
   const [shares, setShares] = useState<PackShare[]>([]);
@@ -13,6 +14,8 @@ export default function PackShareComponent() {
   const [newTip, setNewTip] = useState("");
   const [sending, setSending] = useState(false);
   const [tipError, setTipError] = useState<string | null>(null);
+  const { showAlert } = useAlert();
+
 
   const { requireAuth, user } = useRequireAuth();
 
@@ -61,7 +64,7 @@ export default function PackShareComponent() {
         setNewTip("");
       } catch (err: any) {
         console.error(err);
-        alert("Failed to send tip");
+        showAlert("Failed to send tip", "error");
       } finally {
         setSending(false);
       }
