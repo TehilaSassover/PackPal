@@ -24,12 +24,12 @@ export default function AddToMyListButton({
   const [adding, setAdding] = useState(false);
 
   const { requireAuth, user } = useRequireAuth();
-  const { showAlert, showConfirm, getAlertProps } = useAlert();
+  const { showAlert, getAlertProps } = useAlert();
 
   const handleAddToMyLists = async () => {
     if (!user) {
       showAlert("You must log in to add lists.", "error");
-      requireAuth(() => {}); // פותח את חלון ההרשמה
+      requireAuth(() => { }); // פותח את חלון ההרשמה
       return;
     }
 
@@ -49,13 +49,14 @@ export default function AddToMyListButton({
         throw new Error("Failed to add list.");
       }
 
-      // הצלחה → הצגת הודעה
-      showAlert("The list was added successfully!", "success");
-
-      if (onSuccess) onSuccess();
-
-      router.push("/my-pack/my-lists");
-
+      showAlert(
+        "The list was added successfully!",
+        "success",
+        () => {
+          if (onSuccess) onSuccess();
+          router.push("/my-pack/my-lists");
+        }
+      );
     } catch (err: any) {
       showAlert(err.message || "Error adding list.", "error");
     } finally {

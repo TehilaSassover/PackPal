@@ -7,6 +7,7 @@ interface AlertOptions {
   type: AlertType;
   message: string;
   onConfirm?: () => void;
+  onClose?: () => void;
 }
 
 /**
@@ -17,9 +18,25 @@ export function useAlert() {
   const [alert, setAlert] = useState<AlertOptions | null>(null);
 
   // Show simple success/error alert
-  const showAlert = useCallback((message: string, type: "success" | "error" = "success") => {
-    setAlert({ message, type });
-  }, []);
+  // const showAlert = useCallback((message: string, type: "success" | "error" = "success") => {
+  //   setAlert({ message, type });
+  // }, []);
+
+  const showAlert = useCallback(
+    (
+      message: string,
+      type: "success" | "error" = "success",
+      onClose?: () => void
+    ) => {
+      setAlert({
+        message,
+        type,
+        onClose,
+      });
+    },
+    []
+  );
+
 
   // Show confirm alert
   const showConfirm = useCallback((message: string, onConfirm: () => void) => {
@@ -33,15 +50,30 @@ export function useAlert() {
    * Returns props to pass into AlertModal component
    * AlertModal stays in JSX (.tsx), hook remains .ts
    */
+  // const getAlertProps = (): AlertModalProps | null => {
+  //   if (!alert) return null;
+  //   return {
+  //     type: alert.type,
+  //     message: alert.message,
+  //     onClose: closeAlert,
+  //     onConfirm: alert.onConfirm,
+  //   };
+  // };
+
   const getAlertProps = (): AlertModalProps | null => {
     if (!alert) return null;
+
     return {
       type: alert.type,
       message: alert.message,
-      onClose: closeAlert,
+      onClose: () => {
+        alert.onClose?.(); // 👈 מפעיל המשך אם יש
+        closeAlert();
+      },
       onConfirm: alert.onConfirm,
     };
   };
+
 
   return { showAlert, showConfirm, closeAlert, getAlertProps };
 }

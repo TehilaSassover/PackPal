@@ -20,7 +20,7 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <Link href="/"> <img src="/logo.png" alt="Ludo Logo" className={styles.logoImg} /></Link>
+        <Link href="/"> <img src="/logo.webp" alt="Ludo Logo" className={styles.logoImg} /></Link>
       </div>
       <nav className={styles.nav}>
         {tabs.map(tab => (
